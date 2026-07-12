@@ -1,0 +1,44 @@
+# ==================== 模型权重（太大，不上传 GitHub）====================
+*.pt
+*.pth
+*.pkl
+*.h5
+*.hdf5
+*.ckpt
+
+# ==================== 训练输出 ====================
+KMU-FED/output_kmu_fed_clip/tensorboard/
+KMU-FED/output_kmu_fed_clip/fold_*/
+!KMU-FED/output_kmu_fed_clip/analysis/
+!KMU-FED/output_kmu_fed_clip/training_metrics.json
+
+# ==================== Python ====================
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ==================== 虚拟环境 ====================
+venv/
+env/
+.venv/
+
+# ==================== IDE ====================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==================== 系统文件 ====================
+.DS_Store
+Thumbs.db
+*.tmp
+
+# ==================== Jupyter ====================
+.ipynb_checkpoints/
+
+# ==================== 其他 ====================
+yolov8n.pt
+haarcascade_frontalface_default.xml
