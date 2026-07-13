@@ -148,9 +148,9 @@ class KMU_FED(Dataset):
 # ===================== 训练一折 =====================
 def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)  #学习率衰减
     best_val_acc = 0.0
-    patience_counter = 0
+    patience_counter = 0  # 连续没有提升的轮数 达到阈值则停止训练
     fold_dir = os.path.join(args.output_dir, f"fold_{fold_idx}")
     os.makedirs(fold_dir, exist_ok=True)
 
@@ -169,9 +169,9 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
         t0 = time.time()
         for imgs, labels in train_loader:
             imgs, labels = imgs.to(args.device), labels.to(args.device)
-            outputs, mc_loss = model(imgs, labels, phase='train')
+            outputs, mc_loss = model(imgs, labels, phase='train')  # 前向传播
 
-            loss_ce = F.cross_entropy(outputs, labels)
+            loss_ce = F.cross_entropy(outputs, labels)  # 主分类交叉熵损失
             loss = (LOSS_WEIGHT_CE * loss_ce +
                     LOSS_WEIGHT_DIVERSITY * mc_loss[1] +
                     LOSS_WEIGHT_MASKED * mc_loss[0])

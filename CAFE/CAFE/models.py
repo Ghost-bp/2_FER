@@ -156,6 +156,7 @@ def Mask(nb_batch, device='cuda'):
 
 
 def supervisor(x, targets, cnum, device='cuda'):
+    # cnum是特征向量的分块数量 也就是每个chunk的特征维度
     """
     监督分支损失（两部分组成）：
       - loss_1: 对掩码后特征做 max pooling + CrossEntropy，鼓励单个 chunk 内判别能力
@@ -163,13 +164,14 @@ def supervisor(x, targets, cnum, device='cuda'):
     """
     branch = x
     branch = branch.reshape(branch.size(0), branch.size(1), 1, 1)
-    branch = my_MaxPool2d(kernel_size=(1, cnum), stride=(1, cnum))(branch)
+    branch = my_MaxPool2d(kernel_size=(1, cnum), stride=(1, cnum))(branch)  # 以73为窗口进行滑动 取最大值
     branch = branch.reshape(branch.size(0), branch.size(1),
                             branch.size(2) * branch.size(3))
     loss_2 = 1.0 - 1.0 * torch.mean(torch.sum(branch, 2)) / cnum
 
     mask = Mask(x.size(0), device=device)
     branch_1 = x.reshape(x.size(0), x.size(1), 1, 1) * mask
+    # 进行随机掩码 如果模型还可以分类正确 说明不依赖捷径
     branch_1 = my_MaxPool2d(kernel_size=(1, cnum), stride=(1, cnum))(branch_1)
     branch_1 = branch_1.view(branch_1.size(0), -1)
     loss_1 = nn.CrossEntropyLoss()(branch_1, targets)
@@ -199,36 +201,38 @@ class Model(nn.Module):
         res18 = ResNet(block=BasicBlock, n_blocks=[2, 2, 2, 2],
                        channels=[64, 128, 256, 512], output_dim=1000)
 
+        # 这里相当于是迁移学习
         if resnet_pretrained_path is not None:
             msceleb_model = torch.load(resnet_pretrained_path, map_location=device)
-            state_dict = msceleb_model['state_dict']
-            res18.load_state_dict(state_dict, strict=False)
+            state_dict = msceleb_model['state_dict']  # 加载训练结构一样的预处理模型
+            res18.load_state_dict(state_dict, strict=False)  # 如果有不匹配的层 就跳过不报错 然进行随机初始化
 
-        self.features = nn.Sequential(*list(res18.children())[:-2])
-        self.features2 = nn.Sequential(*list(res18.children())[-2:-1])
+        self.features = nn.Sequential(*list(res18.children())[:-2])  # 去掉最后两层 也就是fc和avgpool层
+        self.features2 = nn.Sequential(*list(res18.children())[-2:-1])  # 取出avgpool层
 
-        fc_in_dim = list(res18.children())[-1].in_features  # = 512
-        self.fc = nn.Linear(fc_in_dim, num_classes)
+        fc_in_dim = list(res18.children())[-1].in_features  # = 512  # 获取新的512维度的六种表情 
+        self.fc = nn.Linear(fc_in_dim, num_classes)  # 去掉预训练的旧分类头 换成新的上面获取的新的分类头
 
     def forward(self, x, targets=None, phase='train'):
         with torch.no_grad():
+            # CLIP冻结 不参与模型训练
             image_features = self.clip_model.encode_image(x)
 
         x = self.features(x)
         x = self.features2(x)
-        x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)  # 展平
 
         MC_loss = None
         if phase == 'train':
             MC_loss = supervisor(
-                image_features * torch.sigmoid(x),
+                image_features * torch.sigmoid(x), 
                 targets, cnum=73, device=self.device
-            )
+            )  # 门控融合 用来决定激活哪些语义维度
 
         x = image_features * torch.sigmoid(x)
-        out = self.fc(x)
+        out = self.fc(x)  # 每一个类别一个分数 取最大的就是预测结果
 
         if phase == 'train':
             return out, MC_loss
         else:
-            return out
+            return out  # 只要分类结果
