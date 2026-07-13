@@ -14,22 +14,23 @@ import clip as clip_module
 # ==================== 自定义池化层 ====================
 class my_MaxPool2d(nn.Module):
     """在维度 1 上做 max pooling（自定义 transpose 实现）。"""
-    def __init__(self, kernel_size, stride=None, padding=0, dilation=1,
-                 return_indices=False, ceil_mode=False):
+    def __init__(self, kernel_size, stride=None, padding=0, dilation=1,  
+                 return_indices=False, ceil_mode=False):  
+        # dilation就是卷积核内部参数之间的间距  比如第一层 1 1 1 -> 1 0 1 0 1
         super(my_MaxPool2d, self).__init__()
         self.kernel_size = kernel_size
         self.stride = stride or kernel_size
         self.padding = padding
         self.dilation = dilation
-        self.return_indices = return_indices
-        self.ceil_mode = ceil_mode
+        self.return_indices = return_indices  # 是否返回最大值的位置索引
+        self.ceil_mode = ceil_mode  # 控制输出尺寸的计算方式，True表示向上取整，False表示向下取整
 
     def forward(self, input):
-        input = input.transpose(3, 1)
+        input = input.transpose(3, 1)  # 转置维度 方便池化
         input = F.max_pool2d(input, self.kernel_size, self.stride,
                              self.padding, self.dilation, self.ceil_mode,
                              self.return_indices)
-        input = input.transpose(3, 1).contiguous()
+        input = input.transpose(3, 1).contiguous()  # 确保张量连续存储
         return input
 
 
@@ -39,6 +40,7 @@ class BasicBlock(nn.Module):
     expansion = 1
 
     def __init__(self, in_channels, out_channels, stride=1, downsample=False):
+        #  downsample是一个布尔值，表示是否需要下采样操作 便于调整尺寸
         super().__init__()
 
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3,
@@ -80,9 +82,10 @@ class BasicBlock(nn.Module):
 class ResNet(nn.Module):
     """ResNet-18 特征提取器（最后一层之前的部分）。"""
     def __init__(self, block, n_blocks, channels, output_dim):
+        # 参数含义 选取的网络(比如resnet18 34) 残差结构的数目 每层输出通道数(比如64 128) 全连接层的输出维度
         super().__init__()
         self.in_channels = channels[0]
-        assert len(n_blocks) == len(channels) == 4
+        assert len(n_blocks) == len(channels) == 4  # 确保参数正确
 
         self.conv1 = nn.Conv2d(3, self.in_channels, kernel_size=7,
                                stride=2, padding=3, bias=False)
@@ -128,6 +131,7 @@ class ResNet(nn.Module):
 
 # ==================== 监督损失模块 ====================
 def Mask(nb_batch, device='cuda'):
+    # nb_batch: 当前有多少张图片
     """
     生成随机二值掩码。
     512 维特征分为 7 个 chunk（每个73维，最后一组74维含补偿），
@@ -139,14 +143,15 @@ def Mask(nb_batch, device='cuda'):
         foo = [1] * 63 + [0] * 10
         if i == 6:
             foo = [1] * 64 + [0] * 10   # 最后一组多1个有效位
-        np.random.shuffle(foo)
+        np.random.shuffle(foo)  # 随机打乱
         bar += foo
-    bar = [bar for _ in range(nb_batch)]
-    bar = np.array(bar).astype("float32")
-    bar = bar.reshape(nb_batch, 512, 1, 1)
-    bar = torch.from_numpy(bar)
-    bar = bar.to(device)
-    bar = Variable(bar)
+    bar = [bar for _ in range(nb_batch)]   # 复制 B 份 → (B, 512)，每张图独立掩码
+    # 每张图的掩码独立，不能共享
+    bar = np.array(bar).astype("float32")  # list → np.ndarray
+    bar = bar.reshape(nb_batch, 512, 1, 1) # (B, 512, 1, 1) 适配卷积特征图形状
+    bar = torch.from_numpy(bar)            # numpy → torch.Tensor
+    bar = bar.to(device)                   # 搬到 GPU/CPU
+    bar = Variable(bar)                    # 包装为 Variable（兼容旧版写法，等同 Tensor）
     return bar
 
 
