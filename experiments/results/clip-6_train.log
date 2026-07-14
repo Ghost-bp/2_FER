@@ -1,0 +1,317 @@
+🖥️  设备: cuda:0
+✅ CLIP 模型加载成功: D:\MM_Emotion\2_FER\CAFE\CAFE\clip\ViT-B-32.pt
+  CLIP 层数: 12 → 6
+🔧 CLIP 层数已调整为: 6
+📈 TensorBoard 日志: D:\MM_Emotion\2_FER\CAFE\CAFE\..\..\KMU-FED\output_kmu_fed_clip\tensorboard\20260715_005307
+人脸检测: YOLO 已加载 (../../yolov8n.pt)
+人脸检测: Haar Cascade 已加载
+
+============================================================
+  数据集分析
+============================================================
+  数据集: D:\MM_Emotion\2_FER\CAFE\CAFE\..\..\KMU-FED\KMU-FED
+  受试者总数: 12
+  图片总数: 1106
+  类别数: 6
+         angry (id=0):  196 ###################
+       disgust (id=1):  120 ############
+          fear (id=2):  200 ####################
+         happy (id=3):  210 #####################
+           sad (id=4):  180 ##################
+      surprise (id=5):  200 ####################
+
+  每受试者图片数:
+    受试者 1: 126 张  [A:26, D:20, F:20, H:20, S:20, S:20]
+    受试者 2:  60 张  [A:10, F:20, H:10, S:20]
+    受试者 3:  90 张  [A:10, F:20, H:20, S:20, S:20]
+    受试者 4:  60 张  [F:20, H:20, S:10, S:10]
+    受试者 5: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 6: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 7: 100 张  [A:20, F:20, H:20, S:20, S:20]
+    受试者 8: 110 张  [A:20, D:20, F:10, H:20, S:20, S:20]
+    受试者 9:  70 张  [A:20, F:10, H:20, S:10, S:10]
+    受试者 10:  80 张  [A:10, D:10, F:20, H:20, S:20]
+    受试者 11: 100 张  [A:20, D:20, F:20, S:20, S:20]
+    受试者 12:  70 张  [A:20, D:10, H:20, S:20]
+============================================================
+
+评估方法: 10-Fold CV
+总轮次: 10
+
+============================================================
+  Fold 1/10: fold_1
+  训练: 926 张 | 验证: 180 张
+============================================================
+Fold 1 Epoch  1 | Train Loss:9.5480 Acc:0.2235 | Val Loss:1.7829 Acc:0.1389 | Time:14s
+Fold 1 Epoch  2 | Train Loss:9.3709 Acc:0.3240 | Val Loss:1.7630 Acc:0.3222 | Time:13s
+Fold 1 Epoch  3 | Train Loss:9.2443 Acc:0.5821 | Val Loss:1.7301 Acc:0.4722 | Time:13s
+Fold 1 Epoch  4 | Train Loss:9.1564 Acc:0.7095 | Val Loss:1.7161 Acc:0.4778 | Time:13s
+Fold 1 Epoch  5 | Train Loss:9.0961 Acc:0.7959 | Val Loss:1.7115 Acc:0.4389 | Time:13s
+Fold 1 Epoch  6 | Train Loss:9.0343 Acc:0.8359 | Val Loss:1.7103 Acc:0.4333 | Time:13s
+Fold 1 Epoch  7 | Train Loss:9.0010 Acc:0.8434 | Val Loss:1.6971 Acc:0.4167 | Time:13s
+Fold 1 Epoch  8 | Train Loss:8.9637 Acc:0.8564 | Val Loss:1.6996 Acc:0.4556 | Time:13s
+Fold 1 Epoch  9 | Train Loss:8.9368 Acc:0.8683 | Val Loss:1.6954 Acc:0.4389 | Time:13s
+Fold 1 Epoch 10 | Train Loss:8.9110 Acc:0.8737 | Val Loss:1.6804 Acc:0.4833 | Time:13s
+Fold 1 Epoch 11 | Train Loss:8.8947 Acc:0.8747 | Val Loss:1.6889 Acc:0.4222 | Time:13s
+Fold 1 Epoch 12 | Train Loss:8.8683 Acc:0.8834 | Val Loss:1.6798 Acc:0.4500 | Time:13s
+Fold 1 Epoch 13 | Train Loss:8.8619 Acc:0.8801 | Val Loss:1.6833 Acc:0.4056 | Time:13s
+Fold 1 Epoch 14 | Train Loss:8.8334 Acc:0.8898 | Val Loss:1.6774 Acc:0.4556 | Time:13s
+Fold 1 Epoch 15 | Train Loss:8.8335 Acc:0.8888 | Val Loss:1.6706 Acc:0.4833 | Time:13s
+Fold 1 Epoch 16 | Train Loss:8.8163 Acc:0.8952 | Val Loss:1.6738 Acc:0.4556 | Time:13s
+Fold 1 Epoch 17 | Train Loss:8.7994 Acc:0.8931 | Val Loss:1.6704 Acc:0.4556 | Time:13s
+Fold 1 Epoch 18 | Train Loss:8.7861 Acc:0.8888 | Val Loss:1.6728 Acc:0.4667 | Time:13s
+Fold 1 Epoch 19 | Train Loss:8.7723 Acc:0.8952 | Val Loss:1.6717 Acc:0.4500 | Time:13s
+Fold 1 Epoch 20 | Train Loss:8.7571 Acc:0.8996 | Val Loss:1.6664 Acc:0.4556 | Time:13s
+  ⏹ 早停于 Epoch 20（10 轮未提升）
+  ✅ Fold1 Best Val Acc: 0.4833
+
+============================================================
+  Fold 2/10: fold_2
+  训练: 910 张 | 验证: 196 张
+============================================================
+Fold 2 Epoch  1 | Train Loss:9.5507 Acc:0.2000 | Val Loss:1.7099 Acc:0.4184 | Time:12s
+Fold 2 Epoch  2 | Train Loss:9.3598 Acc:0.5132 | Val Loss:1.6800 Acc:0.5255 | Time:12s
+Fold 2 Epoch  3 | Train Loss:9.2416 Acc:0.7143 | Val Loss:1.6429 Acc:0.5816 | Time:12s
+Fold 2 Epoch  4 | Train Loss:9.1630 Acc:0.7725 | Val Loss:1.6290 Acc:0.6071 | Time:13s
+Fold 2 Epoch  5 | Train Loss:9.1058 Acc:0.7967 | Val Loss:1.6111 Acc:0.6378 | Time:13s
+Fold 2 Epoch  6 | Train Loss:9.0504 Acc:0.8253 | Val Loss:1.6010 Acc:0.6224 | Time:13s
+Fold 2 Epoch  7 | Train Loss:8.9993 Acc:0.8451 | Val Loss:1.6036 Acc:0.5816 | Time:13s
+Fold 2 Epoch  8 | Train Loss:8.9774 Acc:0.8571 | Val Loss:1.5969 Acc:0.5969 | Time:13s
+Fold 2 Epoch  9 | Train Loss:8.9348 Acc:0.8484 | Val Loss:1.5952 Acc:0.6071 | Time:13s
+Fold 2 Epoch 10 | Train Loss:8.9073 Acc:0.8692 | Val Loss:1.5885 Acc:0.6378 | Time:13s
+Fold 2 Epoch 11 | Train Loss:8.8818 Acc:0.8725 | Val Loss:1.5848 Acc:0.6020 | Time:13s
+Fold 2 Epoch 12 | Train Loss:8.8615 Acc:0.8714 | Val Loss:1.5791 Acc:0.6480 | Time:13s
+Fold 2 Epoch 13 | Train Loss:8.8651 Acc:0.8769 | Val Loss:1.5809 Acc:0.5867 | Time:13s
+Fold 2 Epoch 14 | Train Loss:8.8215 Acc:0.8813 | Val Loss:1.5738 Acc:0.6224 | Time:13s
+Fold 2 Epoch 15 | Train Loss:8.8322 Acc:0.8802 | Val Loss:1.5786 Acc:0.6327 | Time:13s
+Fold 2 Epoch 16 | Train Loss:8.8163 Acc:0.8813 | Val Loss:1.5721 Acc:0.5765 | Time:13s
+Fold 2 Epoch 17 | Train Loss:8.7987 Acc:0.8802 | Val Loss:1.5674 Acc:0.6327 | Time:13s
+Fold 2 Epoch 18 | Train Loss:8.7938 Acc:0.8791 | Val Loss:1.5685 Acc:0.6429 | Time:13s
+Fold 2 Epoch 19 | Train Loss:8.7778 Acc:0.8868 | Val Loss:1.5670 Acc:0.6480 | Time:13s
+Fold 2 Epoch 20 | Train Loss:8.7715 Acc:0.8813 | Val Loss:1.5674 Acc:0.6122 | Time:13s
+Fold 2 Epoch 21 | Train Loss:8.7648 Acc:0.8802 | Val Loss:1.5596 Acc:0.6224 | Time:13s
+Fold 2 Epoch 22 | Train Loss:8.7566 Acc:0.8846 | Val Loss:1.5616 Acc:0.6224 | Time:13s
+  ⏹ 早停于 Epoch 22（10 轮未提升）
+  ✅ Fold2 Best Val Acc: 0.6480
+
+============================================================
+  Fold 3/10: fold_3
+  训练: 986 张 | 验证: 120 张
+============================================================
+Fold 3 Epoch  1 | Train Loss:9.5411 Acc:0.2718 | Val Loss:1.7761 Acc:0.3417 | Time:13s
+Fold 3 Epoch  2 | Train Loss:9.3437 Acc:0.6085 | Val Loss:1.7315 Acc:0.5500 | Time:13s
+Fold 3 Epoch  3 | Train Loss:9.2458 Acc:0.7170 | Val Loss:1.6928 Acc:0.6167 | Time:13s
+Fold 3 Epoch  4 | Train Loss:9.1459 Acc:0.8002 | Val Loss:1.6867 Acc:0.5583 | Time:14s
+Fold 3 Epoch  5 | Train Loss:9.0741 Acc:0.8256 | Val Loss:1.6752 Acc:0.5000 | Time:14s
+Fold 3 Epoch  6 | Train Loss:9.0219 Acc:0.8418 | Val Loss:1.6635 Acc:0.4833 | Time:14s
+Fold 3 Epoch  7 | Train Loss:8.9793 Acc:0.8529 | Val Loss:1.6557 Acc:0.6333 | Time:14s
+Fold 3 Epoch  8 | Train Loss:8.9431 Acc:0.8671 | Val Loss:1.6509 Acc:0.6250 | Time:14s
+Fold 3 Epoch  9 | Train Loss:8.9159 Acc:0.8712 | Val Loss:1.6411 Acc:0.6250 | Time:14s
+Fold 3 Epoch 10 | Train Loss:8.8918 Acc:0.8722 | Val Loss:1.6455 Acc:0.5417 | Time:14s
+Fold 3 Epoch 11 | Train Loss:8.8679 Acc:0.8763 | Val Loss:1.6325 Acc:0.5917 | Time:14s
+Fold 3 Epoch 12 | Train Loss:8.8271 Acc:0.8803 | Val Loss:1.6314 Acc:0.5417 | Time:14s
+Fold 3 Epoch 13 | Train Loss:8.8213 Acc:0.8884 | Val Loss:1.6372 Acc:0.5083 | Time:14s
+Fold 3 Epoch 14 | Train Loss:8.8063 Acc:0.8915 | Val Loss:1.6232 Acc:0.5583 | Time:14s
+Fold 3 Epoch 15 | Train Loss:8.7976 Acc:0.8864 | Val Loss:1.6302 Acc:0.5500 | Time:14s
+Fold 3 Epoch 16 | Train Loss:8.7785 Acc:0.8895 | Val Loss:1.6320 Acc:0.5417 | Time:14s
+Fold 3 Epoch 17 | Train Loss:8.7689 Acc:0.8895 | Val Loss:1.6114 Acc:0.5583 | Time:14s
+  ⏹ 早停于 Epoch 17（10 轮未提升）
+  ✅ Fold3 Best Val Acc: 0.6333
+
+============================================================
+  Fold 4/10: fold_4
+  训练: 1016 张 | 验证: 90 张
+============================================================
+Fold 4 Epoch  1 | Train Loss:9.5557 Acc:0.1801 | Val Loss:1.7205 Acc:0.2333 | Time:14s
+Fold 4 Epoch  2 | Train Loss:9.3627 Acc:0.5226 | Val Loss:1.6467 Acc:0.6667 | Time:14s
+Fold 4 Epoch  3 | Train Loss:9.2479 Acc:0.7018 | Val Loss:1.5904 Acc:0.6444 | Time:14s
+Fold 4 Epoch  4 | Train Loss:9.1580 Acc:0.7904 | Val Loss:1.5751 Acc:0.6222 | Time:14s
+Fold 4 Epoch  5 | Train Loss:9.0904 Acc:0.8130 | Val Loss:1.5498 Acc:0.6556 | Time:14s
+Fold 4 Epoch  6 | Train Loss:9.0394 Acc:0.8337 | Val Loss:1.5555 Acc:0.6444 | Time:14s
+Fold 4 Epoch  7 | Train Loss:9.0027 Acc:0.8455 | Val Loss:1.5509 Acc:0.5889 | Time:14s
+Fold 4 Epoch  8 | Train Loss:8.9561 Acc:0.8514 | Val Loss:1.5483 Acc:0.6444 | Time:14s
+Fold 4 Epoch  9 | Train Loss:8.9267 Acc:0.8652 | Val Loss:1.5207 Acc:0.7000 | Time:14s
+Fold 4 Epoch 10 | Train Loss:8.9014 Acc:0.8671 | Val Loss:1.5110 Acc:0.7667 | Time:14s
+Fold 4 Epoch 11 | Train Loss:8.8786 Acc:0.8770 | Val Loss:1.5138 Acc:0.7222 | Time:14s
+Fold 4 Epoch 12 | Train Loss:8.8526 Acc:0.8907 | Val Loss:1.5061 Acc:0.6889 | Time:15s
+Fold 4 Epoch 13 | Train Loss:8.8309 Acc:0.9016 | Val Loss:1.4974 Acc:0.7333 | Time:15s
+Fold 4 Epoch 14 | Train Loss:8.8157 Acc:0.9065 | Val Loss:1.4737 Acc:0.7556 | Time:14s
+Fold 4 Epoch 15 | Train Loss:8.8008 Acc:0.9154 | Val Loss:1.5013 Acc:0.6889 | Time:14s
+Fold 4 Epoch 16 | Train Loss:8.7855 Acc:0.9222 | Val Loss:1.4934 Acc:0.7556 | Time:15s
+Fold 4 Epoch 17 | Train Loss:8.7867 Acc:0.9281 | Val Loss:1.4875 Acc:0.6333 | Time:15s
+Fold 4 Epoch 18 | Train Loss:8.7532 Acc:0.9439 | Val Loss:1.4905 Acc:0.7444 | Time:14s
+Fold 4 Epoch 19 | Train Loss:8.7433 Acc:0.9469 | Val Loss:1.4865 Acc:0.7444 | Time:14s
+Fold 4 Epoch 20 | Train Loss:8.7407 Acc:0.9301 | Val Loss:1.4804 Acc:0.7111 | Time:15s
+  ⏹ 早停于 Epoch 20（10 轮未提升）
+  ✅ Fold4 Best Val Acc: 0.7667
+
+============================================================
+  Fold 5/10: fold_5
+  训练: 1046 张 | 验证: 60 张
+============================================================
+Fold 5 Epoch  1 | Train Loss:9.5226 Acc:0.2543 | Val Loss:1.7200 Acc:0.3833 | Time:14s
+Fold 5 Epoch  2 | Train Loss:9.3465 Acc:0.5373 | Val Loss:1.6765 Acc:0.5167 | Time:14s
+Fold 5 Epoch  3 | Train Loss:9.2290 Acc:0.7132 | Val Loss:1.6233 Acc:0.5667 | Time:14s
+Fold 5 Epoch  4 | Train Loss:9.1336 Acc:0.7782 | Val Loss:1.6083 Acc:0.7000 | Time:15s
+Fold 5 Epoch  5 | Train Loss:9.0752 Acc:0.8174 | Val Loss:1.5947 Acc:0.6500 | Time:15s
+Fold 5 Epoch  6 | Train Loss:9.0103 Acc:0.8384 | Val Loss:1.5943 Acc:0.5833 | Time:15s
+Fold 5 Epoch  7 | Train Loss:8.9549 Acc:0.8566 | Val Loss:1.5800 Acc:0.7333 | Time:15s
+Fold 5 Epoch  8 | Train Loss:8.9279 Acc:0.8576 | Val Loss:1.5716 Acc:0.6833 | Time:15s
+Fold 5 Epoch  9 | Train Loss:8.9011 Acc:0.8700 | Val Loss:1.5805 Acc:0.5833 | Time:15s
+Fold 5 Epoch 10 | Train Loss:8.8745 Acc:0.8815 | Val Loss:1.5753 Acc:0.7167 | Time:15s
+Fold 5 Epoch 11 | Train Loss:8.8736 Acc:0.8834 | Val Loss:1.5596 Acc:0.6000 | Time:15s
+Fold 5 Epoch 12 | Train Loss:8.8341 Acc:0.8881 | Val Loss:1.5680 Acc:0.6000 | Time:15s
+Fold 5 Epoch 13 | Train Loss:8.8189 Acc:0.8996 | Val Loss:1.5639 Acc:0.6333 | Time:15s
+Fold 5 Epoch 14 | Train Loss:8.7928 Acc:0.9015 | Val Loss:1.5619 Acc:0.6333 | Time:15s
+Fold 5 Epoch 15 | Train Loss:8.7945 Acc:0.9082 | Val Loss:1.5568 Acc:0.5833 | Time:15s
+Fold 5 Epoch 16 | Train Loss:8.7727 Acc:0.9168 | Val Loss:1.5587 Acc:0.6167 | Time:15s
+Fold 5 Epoch 17 | Train Loss:8.7508 Acc:0.9293 | Val Loss:1.5458 Acc:0.6667 | Time:15s
+  ⏹ 早停于 Epoch 17（10 轮未提升）
+  ✅ Fold5 Best Val Acc: 0.7333
+
+============================================================
+  Fold 6/10: fold_6
+  训练: 1036 张 | 验证: 70 张
+============================================================
+Fold 6 Epoch  1 | Train Loss:9.5198 Acc:0.2239 | Val Loss:1.8841 Acc:0.0000 | Time:14s
+Fold 6 Epoch  2 | Train Loss:9.3439 Acc:0.4749 | Val Loss:1.8358 Acc:0.1714 | Time:14s
+Fold 6 Epoch  3 | Train Loss:9.2226 Acc:0.6969 | Val Loss:1.8296 Acc:0.4143 | Time:14s
+Fold 6 Epoch  4 | Train Loss:9.1303 Acc:0.7413 | Val Loss:1.8321 Acc:0.4286 | Time:14s
+Fold 6 Epoch  5 | Train Loss:9.0576 Acc:0.8041 | Val Loss:1.8187 Acc:0.4286 | Time:15s
+Fold 6 Epoch  6 | Train Loss:8.9952 Acc:0.8224 | Val Loss:1.8296 Acc:0.4571 | Time:15s
+Fold 6 Epoch  7 | Train Loss:8.9656 Acc:0.8456 | Val Loss:1.8417 Acc:0.3714 | Time:15s
+Fold 6 Epoch  8 | Train Loss:8.9218 Acc:0.8446 | Val Loss:1.8248 Acc:0.4714 | Time:15s
+Fold 6 Epoch  9 | Train Loss:8.8829 Acc:0.8571 | Val Loss:1.8376 Acc:0.4429 | Time:14s
+Fold 6 Epoch 10 | Train Loss:8.8559 Acc:0.8716 | Val Loss:1.8271 Acc:0.4429 | Time:15s
+Fold 6 Epoch 11 | Train Loss:8.8376 Acc:0.8707 | Val Loss:1.8262 Acc:0.4714 | Time:15s
+Fold 6 Epoch 12 | Train Loss:8.8242 Acc:0.8716 | Val Loss:1.8254 Acc:0.4714 | Time:15s
+Fold 6 Epoch 13 | Train Loss:8.7957 Acc:0.8803 | Val Loss:1.8251 Acc:0.4714 | Time:15s
+Fold 6 Epoch 14 | Train Loss:8.7921 Acc:0.8755 | Val Loss:1.8347 Acc:0.4286 | Time:15s
+Fold 6 Epoch 15 | Train Loss:8.7707 Acc:0.8842 | Val Loss:1.8266 Acc:0.4714 | Time:15s
+Fold 6 Epoch 16 | Train Loss:8.7767 Acc:0.8822 | Val Loss:1.8326 Acc:0.4714 | Time:15s
+Fold 6 Epoch 17 | Train Loss:8.7363 Acc:0.8880 | Val Loss:1.8354 Acc:0.4714 | Time:15s
+Fold 6 Epoch 18 | Train Loss:8.7456 Acc:0.8880 | Val Loss:1.8480 Acc:0.4714 | Time:15s
+  ⏹ 早停于 Epoch 18（10 轮未提升）
+  ✅ Fold6 Best Val Acc: 0.4714
+
+============================================================
+  Fold 7/10: fold_7
+  训练: 986 张 | 验证: 120 张
+============================================================
+Fold 7 Epoch  1 | Train Loss:9.5473 Acc:0.2312 | Val Loss:1.7867 Acc:0.1667 | Time:13s
+Fold 7 Epoch  2 | Train Loss:9.3539 Acc:0.4970 | Val Loss:1.7467 Acc:0.3000 | Time:13s
+Fold 7 Epoch  3 | Train Loss:9.2246 Acc:0.6643 | Val Loss:1.7085 Acc:0.3750 | Time:13s
+Fold 7 Epoch  4 | Train Loss:9.1567 Acc:0.7556 | Val Loss:1.6778 Acc:0.4333 | Time:13s
+Fold 7 Epoch  5 | Train Loss:9.0773 Acc:0.8043 | Val Loss:1.6564 Acc:0.4417 | Time:14s
+Fold 7 Epoch  6 | Train Loss:9.0194 Acc:0.8387 | Val Loss:1.6574 Acc:0.4750 | Time:14s
+Fold 7 Epoch  7 | Train Loss:8.9638 Acc:0.8590 | Val Loss:1.6482 Acc:0.4917 | Time:13s
+Fold 7 Epoch  8 | Train Loss:8.9434 Acc:0.8682 | Val Loss:1.6372 Acc:0.5083 | Time:13s
+Fold 7 Epoch  9 | Train Loss:8.9104 Acc:0.8692 | Val Loss:1.6362 Acc:0.5250 | Time:14s
+Fold 7 Epoch 10 | Train Loss:8.9017 Acc:0.8753 | Val Loss:1.6287 Acc:0.5417 | Time:14s
+Fold 7 Epoch 11 | Train Loss:8.8723 Acc:0.8732 | Val Loss:1.6303 Acc:0.4917 | Time:14s
+Fold 7 Epoch 12 | Train Loss:8.8497 Acc:0.8803 | Val Loss:1.6233 Acc:0.4917 | Time:14s
+Fold 7 Epoch 13 | Train Loss:8.8153 Acc:0.8884 | Val Loss:1.6223 Acc:0.5167 | Time:14s
+Fold 7 Epoch 14 | Train Loss:8.8114 Acc:0.8874 | Val Loss:1.6131 Acc:0.5250 | Time:14s
+Fold 7 Epoch 15 | Train Loss:8.7943 Acc:0.8874 | Val Loss:1.6093 Acc:0.5083 | Time:14s
+Fold 7 Epoch 16 | Train Loss:8.7736 Acc:0.8925 | Val Loss:1.6001 Acc:0.6417 | Time:14s
+Fold 7 Epoch 17 | Train Loss:8.7770 Acc:0.8945 | Val Loss:1.6059 Acc:0.5083 | Time:14s
+Fold 7 Epoch 18 | Train Loss:8.7477 Acc:0.8874 | Val Loss:1.6046 Acc:0.5500 | Time:14s
+Fold 7 Epoch 19 | Train Loss:8.7559 Acc:0.8895 | Val Loss:1.5957 Acc:0.6000 | Time:14s
+Fold 7 Epoch 20 | Train Loss:8.7394 Acc:0.8955 | Val Loss:1.5953 Acc:0.5917 | Time:14s
+Fold 7 Epoch 21 | Train Loss:8.7189 Acc:0.8986 | Val Loss:1.5931 Acc:0.6083 | Time:14s
+Fold 7 Epoch 22 | Train Loss:8.7215 Acc:0.8945 | Val Loss:1.5929 Acc:0.5417 | Time:14s
+Fold 7 Epoch 23 | Train Loss:8.7187 Acc:0.8955 | Val Loss:1.5927 Acc:0.5750 | Time:14s
+Fold 7 Epoch 24 | Train Loss:8.7069 Acc:0.8935 | Val Loss:1.5894 Acc:0.5750 | Time:14s
+Fold 7 Epoch 25 | Train Loss:8.7129 Acc:0.8955 | Val Loss:1.5901 Acc:0.5083 | Time:14s
+Fold 7 Epoch 26 | Train Loss:8.7019 Acc:0.8955 | Val Loss:1.5897 Acc:0.5833 | Time:14s
+  ⏹ 早停于 Epoch 26（10 轮未提升）
+  ✅ Fold7 Best Val Acc: 0.6417
+
+============================================================
+  Fold 8/10: fold_8
+  训练: 996 张 | 验证: 110 张
+============================================================
+Fold 8 Epoch  1 | Train Loss:9.5411 Acc:0.2932 | Val Loss:1.7570 Acc:0.2727 | Time:13s
+Fold 8 Epoch  2 | Train Loss:9.3509 Acc:0.5261 | Val Loss:1.6905 Acc:0.6818 | Time:14s
+Fold 8 Epoch  3 | Train Loss:9.2429 Acc:0.7510 | Val Loss:1.6600 Acc:0.6909 | Time:14s
+Fold 8 Epoch  4 | Train Loss:9.1328 Acc:0.7701 | Val Loss:1.6366 Acc:0.6727 | Time:14s
+Fold 8 Epoch  5 | Train Loss:9.0738 Acc:0.8233 | Val Loss:1.6250 Acc:0.6909 | Time:14s
+Fold 8 Epoch  6 | Train Loss:9.0411 Acc:0.8384 | Val Loss:1.6289 Acc:0.6909 | Time:14s
+Fold 8 Epoch  7 | Train Loss:8.9796 Acc:0.8554 | Val Loss:1.6062 Acc:0.6909 | Time:14s
+Fold 8 Epoch  8 | Train Loss:8.9469 Acc:0.8614 | Val Loss:1.6103 Acc:0.6909 | Time:14s
+Fold 8 Epoch  9 | Train Loss:8.9154 Acc:0.8745 | Val Loss:1.5988 Acc:0.6909 | Time:14s
+Fold 8 Epoch 10 | Train Loss:8.8915 Acc:0.8775 | Val Loss:1.5992 Acc:0.6909 | Time:14s
+Fold 8 Epoch 11 | Train Loss:8.8679 Acc:0.8825 | Val Loss:1.5873 Acc:0.6909 | Time:14s
+Fold 8 Epoch 12 | Train Loss:8.8481 Acc:0.8825 | Val Loss:1.5959 Acc:0.6636 | Time:14s
+Fold 8 Epoch 13 | Train Loss:8.8335 Acc:0.8815 | Val Loss:1.5874 Acc:0.6909 | Time:14s
+  ⏹ 早停于 Epoch 13（10 轮未提升）
+  ✅ Fold8 Best Val Acc: 0.6909
+
+============================================================
+  Fold 9/10: fold_9
+  训练: 1046 张 | 验证: 60 张
+============================================================
+Fold 9 Epoch  1 | Train Loss:9.5276 Acc:0.2811 | Val Loss:1.7404 Acc:0.4167 | Time:14s
+Fold 9 Epoch  2 | Train Loss:9.3475 Acc:0.5449 | Val Loss:1.7422 Acc:0.3000 | Time:14s
+Fold 9 Epoch  3 | Train Loss:9.2185 Acc:0.6941 | Val Loss:1.7345 Acc:0.2500 | Time:14s
+Fold 9 Epoch  4 | Train Loss:9.1335 Acc:0.7916 | Val Loss:1.7323 Acc:0.3667 | Time:15s
+Fold 9 Epoch  5 | Train Loss:9.0782 Acc:0.8155 | Val Loss:1.7416 Acc:0.1833 | Time:15s
+Fold 9 Epoch  6 | Train Loss:9.0194 Acc:0.8337 | Val Loss:1.7372 Acc:0.4333 | Time:15s
+Fold 9 Epoch  7 | Train Loss:8.9770 Acc:0.8499 | Val Loss:1.7350 Acc:0.2833 | Time:15s
+Fold 9 Epoch  8 | Train Loss:8.9406 Acc:0.8614 | Val Loss:1.7230 Acc:0.3333 | Time:14s
+Fold 9 Epoch  9 | Train Loss:8.9161 Acc:0.8518 | Val Loss:1.7221 Acc:0.3667 | Time:15s
+Fold 9 Epoch 10 | Train Loss:8.8940 Acc:0.8642 | Val Loss:1.7023 Acc:0.3333 | Time:15s
+Fold 9 Epoch 11 | Train Loss:8.8388 Acc:0.8700 | Val Loss:1.7120 Acc:0.2333 | Time:15s
+Fold 9 Epoch 12 | Train Loss:8.8313 Acc:0.8671 | Val Loss:1.7177 Acc:0.2333 | Time:15s
+Fold 9 Epoch 13 | Train Loss:8.8111 Acc:0.8824 | Val Loss:1.7098 Acc:0.2667 | Time:16s
+Fold 9 Epoch 14 | Train Loss:8.7935 Acc:0.8795 | Val Loss:1.6937 Acc:0.3833 | Time:15s
+Fold 9 Epoch 15 | Train Loss:8.7870 Acc:0.8920 | Val Loss:1.7080 Acc:0.2167 | Time:15s
+Fold 9 Epoch 16 | Train Loss:8.7697 Acc:0.8929 | Val Loss:1.6914 Acc:0.3833 | Time:15s
+  ⏹ 早停于 Epoch 16（10 轮未提升）
+  ✅ Fold9 Best Val Acc: 0.4333
+
+============================================================
+  Fold 10/10: fold_10
+  训练: 1006 张 | 验证: 100 张
+============================================================
+Fold10 Epoch  1 | Train Loss:9.5421 Acc:0.2247 | Val Loss:1.7208 Acc:0.4000 | Time:14s
+Fold10 Epoch  2 | Train Loss:9.3415 Acc:0.5179 | Val Loss:1.6384 Acc:0.7500 | Time:14s
+Fold10 Epoch  3 | Train Loss:9.2325 Acc:0.7107 | Val Loss:1.6022 Acc:0.7700 | Time:14s
+Fold10 Epoch  4 | Train Loss:9.1414 Acc:0.7435 | Val Loss:1.5996 Acc:0.7600 | Time:14s
+Fold10 Epoch  5 | Train Loss:9.0821 Acc:0.7833 | Val Loss:1.5798 Acc:0.7400 | Time:14s
+Fold10 Epoch  6 | Train Loss:9.0376 Acc:0.8151 | Val Loss:1.5745 Acc:0.8400 | Time:14s
+Fold10 Epoch  7 | Train Loss:8.9959 Acc:0.8370 | Val Loss:1.5824 Acc:0.7700 | Time:14s
+Fold10 Epoch  8 | Train Loss:8.9428 Acc:0.8449 | Val Loss:1.5569 Acc:0.8000 | Time:14s
+Fold10 Epoch  9 | Train Loss:8.9191 Acc:0.8499 | Val Loss:1.5497 Acc:0.8500 | Time:14s
+Fold10 Epoch 10 | Train Loss:8.8800 Acc:0.8738 | Val Loss:1.5427 Acc:0.7900 | Time:14s
+Fold10 Epoch 11 | Train Loss:8.8735 Acc:0.8787 | Val Loss:1.5555 Acc:0.7600 | Time:14s
+Fold10 Epoch 12 | Train Loss:8.8492 Acc:0.8827 | Val Loss:1.5181 Acc:0.7900 | Time:14s
+Fold10 Epoch 13 | Train Loss:8.8316 Acc:0.9195 | Val Loss:1.5315 Acc:0.8500 | Time:15s
+Fold10 Epoch 14 | Train Loss:8.8201 Acc:0.9294 | Val Loss:1.5340 Acc:0.7700 | Time:14s
+Fold10 Epoch 15 | Train Loss:8.8012 Acc:0.9175 | Val Loss:1.5201 Acc:0.8300 | Time:15s
+Fold10 Epoch 16 | Train Loss:8.7773 Acc:0.9374 | Val Loss:1.5116 Acc:0.8300 | Time:14s
+Fold10 Epoch 17 | Train Loss:8.7793 Acc:0.9374 | Val Loss:1.5188 Acc:0.7700 | Time:14s
+Fold10 Epoch 18 | Train Loss:8.7587 Acc:0.9553 | Val Loss:1.5247 Acc:0.7800 | Time:14s
+Fold10 Epoch 19 | Train Loss:8.7624 Acc:0.9573 | Val Loss:1.5057 Acc:0.8400 | Time:15s
+  ⏹ 早停于 Epoch 19（10 轮未提升）
+  ✅ Fold10 Best Val Acc: 0.8500
+
+============================================================
+  交叉验证结果汇总
+============================================================
+  fold_1: 0.4833
+  fold_2: 0.6480
+  fold_3: 0.6333
+  fold_4: 0.7667
+  fold_5: 0.7333
+  fold_6: 0.4714
+  fold_7: 0.6417
+  fold_8: 0.6909
+  fold_9: 0.4333
+  fold_10: 0.8500
+
+  平均精度: 0.6352 +- 0.1292
+
+📝 训练指标已保存: D:\MM_Emotion\2_FER\CAFE\CAFE\..\..\KMU-FED\output_kmu_fed_clip\training_metrics.json
+
+⏱️  总耗时: 57.9 分钟
