@@ -176,9 +176,9 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
                     LOSS_WEIGHT_DIVERSITY * mc_loss[1] +
                     LOSS_WEIGHT_MASKED * mc_loss[0])
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            optimizer.zero_grad()  # 梯度清零
+            loss.backward()  # 反向传播
+            optimizer.step()  # 更新参数
 
             total_loss += loss.item()
             total_ce += loss_ce.item()
@@ -196,7 +196,7 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
         val_correct = 0
         val_total = 0
         val_loss_sum = 0.0
-        with torch.no_grad():
+        with torch.no_grad():  # 验证阶段不进行梯度计算
             for imgs, labels in val_loader:
                 imgs, labels = imgs.to(args.device), labels.to(args.device)
                 outputs = model(imgs, phase='test')
@@ -207,7 +207,7 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
 
         val_acc = val_correct / val_total
         val_loss = val_loss_sum / len(val_loader)
-        scheduler.step()
+        scheduler.step()  # 学习率衰减
 
         # ---- 早停检查 ----
         if val_acc > best_val_acc:
@@ -337,7 +337,7 @@ def run_cross_validation(args, writer):
     if args.cv_method == "loso":
         # Leave-One-Subject-Out: 每人轮流做验证集
         fold_list = [(s, [t for t in unique_subjects if t != s], [s])
-                     for s in unique_subjects]
+                     for s in unique_subjects]  # 相当于是一个人当验证集 剩余11人当作训练集
         method_name = f"LOSO ({len(unique_subjects)} folds)"
     else:
         # K-Fold
@@ -357,11 +357,11 @@ def run_cross_validation(args, writer):
     fold_histories = []
 
     for fold_idx, (fold_name, tr_persons, va_persons) in enumerate(fold_list):
-        tr_set = set(tr_persons)
-        va_set = set(va_persons)
+        tr_set = set(tr_persons)  # 11个训练集合
+        va_set = set(va_persons)  # 1个验证集合
 
-        tr_indices = [i for i, p in enumerate(dataset.subject_ids) if p in tr_set]
-        va_indices = [i for i, p in enumerate(dataset.subject_ids) if p in va_set]
+        tr_indices = [i for i, p in enumerate(dataset.subject_ids) if p in tr_set]  # 跳过验证人的所有图片
+        va_indices = [i for i, p in enumerate(dataset.subject_ids) if p in va_set]  
 
         print(f"\n{'='*60}")
         print(f"  Fold {fold_idx+1}/{len(fold_list)}: {fold_name}")
@@ -372,14 +372,16 @@ def run_cross_validation(args, writer):
         print(f"  训练: {len(tr_indices)} 张 | 验证: {len(va_indices)} 张")
         print(f"{'='*60}")
 
-        train_dataset = KMU_FED(args.data_dir, transform=train_transform, face_detector=face_cascade)
+        train_dataset = KMU_FED(args.data_dir, transform=train_transform, face_detector=face_cascade)  # 进行了数据增强 即随机水平翻转以及随机裁剪
         val_dataset = dataset
 
+        # subset 随机从数据中选取子集
         train_loader = DataLoader(Subset(train_dataset, tr_indices),
                                   args.batch_size, shuffle=True, num_workers=args.num_workers)
         val_loader = DataLoader(Subset(val_dataset, va_indices),
                                 args.batch_size, shuffle=False, num_workers=args.num_workers)
 
+        # 每一折都需要新建模型 因为LOSO要求每一轮独立
         model = Model(
             clip_model=clip_model,
             num_classes=NUM_CLASSES,

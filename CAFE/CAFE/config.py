@@ -62,13 +62,14 @@ INPUT_SIZE = (224, 224)
 BATCH_SIZE = 32
 LEARNING_RATE = 0.0002
 NUM_EPOCHS = 60
-PATIENCE = 10
+PATIENCE = 10  # 10轮没有提升就停止
 NUM_WORKERS = 0
 NUM_FOLDS = 10
 
 # 损失权重
 LOSS_WEIGHT_CE = 1.0       # 交叉熵损失
 LOSS_WEIGHT_DIVERSITY = 5.0   # mc_loss[1] 特征多样性
+# 比下面参数高 说明作认为 防止特征集中比分类准确更加重要
 LOSS_WEIGHT_MASKED = 1.5      # mc_loss[0] 掩码特征交叉熵
 
 # ==================== 表情映射 ====================
