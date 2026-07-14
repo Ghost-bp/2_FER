@@ -102,6 +102,7 @@ def analyze():
     # 3. ResNet avgpool (features2)
     avgpool_total = 0
     avgpool_trainable = 0
+    avgpool_frozen = 0
     for name, param in model.features2.named_parameters():
         n = param.numel()
         avgpool_total += n

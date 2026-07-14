@@ -1,0 +1,32 @@
+{
+  "CLIP_ViT-B-32 (visual)": {
+    "total": 87849216,
+    "trainable": 87849216,
+    "frozen": 0,
+    "formatted": "87.85M"
+  },
+  "ResNet-18 features (conv1~layer4)": {
+    "total": 11176512,
+    "trainable": 11176512,
+    "frozen": 0,
+    "formatted": "11.18M"
+  },
+  "ResNet-18 avgpool (features2)": {
+    "total": 0,
+    "trainable": 0,
+    "frozen": 0,
+    "formatted": "0"
+  },
+  "FC Classifier (512→6)": {
+    "total": 3078,
+    "trainable": 3078,
+    "frozen": 0,
+    "formatted": "3.08K"
+  },
+  "**总计**": {
+    "total": 99028806,
+    "trainable": 99028806,
+    "frozen": 0,
+    "formatted": "99.03M"
+  }
+}
