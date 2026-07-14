@@ -157,6 +157,8 @@ def Mask(nb_batch, device='cuda'):
 
 def supervisor(x, targets, cnum, device='cuda'):
     # cnum是特征向量的分块数量 也就是每个chunk的特征维度
+    # loss_1 逼迫模型学习所有特征 loss_2平均每一个chunk的贡献
+    # 相当于一个防止偷懒 一个防止偏科
     """
     监督分支损失（两部分组成）：
       - loss_1: 对掩码后特征做 max pooling + CrossEntropy，鼓励单个 chunk 内判别能力
@@ -188,15 +190,31 @@ class Model(nn.Module):
       1. ResNet-18（MSCeleb 预训练）提取面部特征
       2. CLIP ViT-B-32（冻结）并行编码图像
       3. sigmoid(ResNet特征) 逐元素门控 CLIP 特征
-      4. 全连接层输出 7 类评分
+      4. 全连接层输出分类评分
 
     训练模式下额外输出 MC_loss（监督分支损失）。
+
+    支持模式：
+      - use_clip=True:  标准 CAFE 双路融合
+      - use_clip=False: 纯 ResNet-18（CLIP 分支移除）
+      - lightweight_encoder="mobilenet_v3": MobileNetV3 替代 CLIP
     """
-    def __init__(self, clip_model, num_classes=7, resnet_pretrained_path=None, device='cpu'):
+    def __init__(self, clip_model, num_classes=7, resnet_pretrained_path=None,
+                 device='cpu', use_clip=True, lightweight_encoder=None):
         super(Model, self).__init__()
 
-        self.clip_model = clip_model
+        self.clip_model = clip_model if use_clip else None
         self.device = device
+        self.use_clip = use_clip
+        self.lightweight_encoder_name = lightweight_encoder
+
+        # 轻量编码器（替代 CLIP）
+        if lightweight_encoder == "mobilenet_v3":
+            from lightweight_encoders import MobileNetV3Encoder
+            self.alt_encoder = MobileNetV3Encoder(output_dim=512)
+            print("  📦 替代编码器: MobileNetV3-Small (~2.5M)")
+        else:
+            self.alt_encoder = None
 
         res18 = ResNet(block=BasicBlock, n_blocks=[2, 2, 2, 2],
                        channels=[64, 128, 256, 512], output_dim=1000)
@@ -210,27 +228,44 @@ class Model(nn.Module):
         self.features = nn.Sequential(*list(res18.children())[:-2])  # 去掉最后两层 也就是fc和avgpool层
         self.features2 = nn.Sequential(*list(res18.children())[-2:-1])  # 取出avgpool层
 
-        fc_in_dim = list(res18.children())[-1].in_features  # = 512  # 获取新的512维度的六种表情 
+        fc_in_dim = list(res18.children())[-1].in_features  # = 512  # 获取新的512维度的六种表情
         self.fc = nn.Linear(fc_in_dim, num_classes)  # 去掉预训练的旧分类头 换成新的上面获取的新的分类头
 
+    def _get_image_features(self, x):
+        """获取外部视觉语义特征（CLIP 或轻量编码器）。"""
+        if self.alt_encoder is not None:
+            # MobileNetV3 / 其他轻量编码器
+            with torch.no_grad():
+                return self.alt_encoder(x)
+        elif self.use_clip and self.clip_model is not None:
+            with torch.no_grad():
+                # CLIP冻结 不参与模型训练
+                return self.clip_model.encode_image(x)
+        else:
+            # 纯 ResNet 模式：无外部特征，使用占位符
+            return None
+
     def forward(self, x, targets=None, phase='train'):
-        with torch.no_grad():
-            # CLIP冻结 不参与模型训练
-            image_features = self.clip_model.encode_image(x)
+        image_features = self._get_image_features(x)
 
         x = self.features(x)
         x = self.features2(x)
         x = x.view(x.size(0), -1)  # 展平
 
+        # 门控融合或纯 ResNet
+        if image_features is not None:
+            fused = image_features * torch.sigmoid(x)
+        else:
+            fused = x  # 纯 ResNet 模式，直接使用 ResNet 特征
+
         MC_loss = None
-        if phase == 'train':
+        if phase == 'train' and image_features is not None:
             MC_loss = supervisor(
-                image_features * torch.sigmoid(x), 
+                fused,
                 targets, cnum=73, device=self.device
             )  # 门控融合 用来决定激活哪些语义维度
 
-        x = image_features * torch.sigmoid(x)
-        out = self.fc(x)  # 每一个类别一个分数 取最大的就是预测结果
+        out = self.fc(fused)  # 每一个类别一个分数 取最大的就是预测结果
 
         if phase == 'train':
             return out, MC_loss

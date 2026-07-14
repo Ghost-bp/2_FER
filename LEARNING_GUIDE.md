@@ -7,6 +7,32 @@
 
 ---
 
+## 🔬 当前阶段：模型轻量化实验
+
+> **状态**: 阶段 0 — 文件体系搭建中  
+> **详见**: [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md)
+
+### 当前需要学习
+
+| 知识点 | 重要性 | 说明 |
+|--------|:------:|------|
+| Transformer 层数与表达能力 | ★★★ | CLIP ViT-B-32 有 12 层，每层包含 Self-Attention + MLP，减层会损失多少语义？ |
+| 深度可分离卷积 (Depthwise Separable Conv) | ★★★ | MobileNet 的核心思想，将标准卷积拆成 Depthwise + Pointwise |
+| MobileNetV3 架构 | ★★ | 实验 6 将用它替代 CLIP，了解其结构和特点 |
+| 模型参数量计算 | ★★ | `param.numel()` 统计，区分 trainable vs frozen |
+| CLIP 文本编码器的零样本分类 | ★★ | 实验 7：用文本向量（如 "a happy face"）直接匹配图像特征 |
+| 知识蒸馏 (Knowledge Distillation) | ★ | 大模型（CLIP-12 层）作为 Teacher 指导小模型训练 |
+
+### 🎬 推荐视频
+
+| 视频 | 链接 |
+|------|------|
+| MobileNet 深度可分离卷积详解 | B 站搜 "MobileNet 深度可分离卷积" |
+| Transformer 层数对性能的影响 | B 站搜 "Transformer scaling" |
+| 知识蒸馏原理与实战 | B 站搜 "知识蒸馏 Knowledge Distillation" |
+
+---
+
 ## 项目技术栈总览
 
 ```

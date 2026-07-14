@@ -28,6 +28,7 @@ from ultralytics import YOLO
 from torch.utils.tensorboard import SummaryWriter
 
 import clip
+from clip_utils import reduce_clip_layers
 from config import (
     DATASET_ROOT, CLIP_MODEL_PATH, RESNET_PRETRAINED_PATH,
     YOLO_MODEL_PATH, OUTPUT_DIR, TENSORBOARD_DIR, METRICS_LOG_PATH,
@@ -68,6 +69,16 @@ def parse_args():
     parser.add_argument("--cv_method", type=str, default="loso",
                         choices=["loso", "kfold"],
                         help="交叉验证方法: loso(留一受试者) / kfold(K折)")
+    # 轻量化实验参数
+    parser.add_argument("--clip_layers", type=int, default=None,
+                        help="CLIP Transformer 层数 (1-12)，默认12层完整")
+    parser.add_argument("--no_clip", action="store_true",
+                        help="移除 CLIP 分支，仅用 ResNet-18")
+    parser.add_argument("--lightweight_encoder", type=str, default=None,
+                        choices=["mobilenet_v3"],
+                        help="用轻量编码器替代 CLIP")
+    parser.add_argument("--clip_text_mode", action="store_true",
+                        help="使用 CLIP 文本编码器做零样本分类")
     return parser.parse_args()
 
 
@@ -172,9 +183,16 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
             outputs, mc_loss = model(imgs, labels, phase='train')  # 前向传播
 
             loss_ce = F.cross_entropy(outputs, labels)  # 主分类交叉熵损失
-            loss = (LOSS_WEIGHT_CE * loss_ce +
-                    LOSS_WEIGHT_DIVERSITY * mc_loss[1] +
-                    LOSS_WEIGHT_MASKED * mc_loss[0])
+            if mc_loss is not None:
+                loss = (LOSS_WEIGHT_CE * loss_ce +
+                        LOSS_WEIGHT_DIVERSITY * mc_loss[1] +
+                        LOSS_WEIGHT_MASKED * mc_loss[0])
+                mc0_val = mc_loss[0].item()
+                mc1_val = mc_loss[1].item()
+            else:
+                loss = loss_ce  # 纯 ResNet 模式，无监督分支损失
+                mc0_val = 0.0
+                mc1_val = 0.0
 
             optimizer.zero_grad()  # 梯度清零
             loss.backward()  # 反向传播
@@ -182,8 +200,8 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
 
             total_loss += loss.item()
             total_ce += loss_ce.item()
-            total_mc0 += mc_loss[0].item()
-            total_mc1 += mc_loss[1].item()
+            total_mc0 += mc0_val
+            total_mc1 += mc1_val
             correct += (outputs.argmax(1) == labels).sum().item()
             total += labels.size(0)
 
@@ -387,6 +405,8 @@ def run_cross_validation(args, writer):
             num_classes=NUM_CLASSES,
             resnet_pretrained_path=args.resnet_pretrained,
             device=args.device,
+            use_clip=not args.no_clip,
+            lightweight_encoder=args.lightweight_encoder,
         ).to(args.device)
 
         best_acc, fold_history = train_one_fold(
@@ -473,6 +493,19 @@ if __name__ == "__main__":
     # CLIP
     clip_model, _ = clip.load(args.clip_model, device=args.device)
     print(f"✅ CLIP 模型加载成功: {args.clip_model}")
+
+    # 轻量化：减少 CLIP Transformer 层数
+    if args.clip_layers is not None:
+        reduce_clip_layers(clip_model, args.clip_layers)
+        print(f"🔧 CLIP 层数已调整为: {args.clip_layers}")
+
+    # 轻量化：不加载 CLIP 图像编码器参数（用 ResNet-only 或 MobileNetV3）
+    if args.no_clip:
+        print("🔧 模式: 纯 ResNet-18（不使用 CLIP）")
+    elif args.lightweight_encoder == "mobilenet_v3":
+        print("🔧 模式: MobileNetV3 替代 CLIP")
+    elif args.clip_text_mode:
+        print("🔧 模式: CLIP 文本编码器辅助")
 
     # TensorBoard
     if args.no_tensorboard:

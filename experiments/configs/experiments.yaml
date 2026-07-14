@@ -1,0 +1,89 @@
+# 实验配置文件
+# 每个实验对应一个 git 分支，包含独立的训练参数
+
+experiments:
+  - id: baseline-kfold
+    branch: exp/baseline-kfold
+    name: "KFold+YOLO 基线"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: null
+    use_clip: true
+    description: "原始 KFold 交叉验证，按受试者划分，YOLO 人脸检测"
+
+  - id: clip-9
+    branch: exp/clip-9
+    name: "CLIP-9 层"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: 9
+    use_clip: true
+    description: "CLIP ViT-B-32 减少到 9 层 Transformer"
+
+  - id: clip-6
+    branch: exp/clip-6
+    name: "CLIP-6 层"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: 6
+    use_clip: true
+    description: "CLIP ViT-B-32 减少到 6 层 Transformer"
+
+  - id: clip-3
+    branch: exp/clip-3
+    name: "CLIP-3 层"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: 3
+    use_clip: true
+    description: "CLIP ViT-B-32 减少到 3 层 Transformer"
+
+  - id: resnet-only
+    branch: exp/resnet-only
+    name: "纯 ResNet-18"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: null
+    use_clip: false
+    description: "移除 CLIP 分支，仅用 ResNet-18 特征 + FC 分类"
+
+  - id: mobilenet
+    branch: exp/mobilenet
+    name: "MobileNetV3 替代"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: null
+    use_clip: false
+    lightweight_encoder: mobilenet_v3
+    description: "用 MobileNetV3-Small (~2.5M) 替代 CLIP ViT-B-32 (~151M)"
+
+  - id: clip-text
+    branch: exp/clip-text
+    name: "CLIP 文本辅助"
+    cv_method: kfold
+    folds: 10
+    epochs: 60
+    batch_size: 32
+    lr: 0.0002
+    clip_layers: null
+    use_clip: true
+    clip_text_mode: true
+    description: "CLIP 文本编码器生成表情类别向量，零样本相似度分类"
