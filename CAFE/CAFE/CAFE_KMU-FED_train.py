@@ -36,6 +36,9 @@ from config import (
     NUM_EPOCHS, PATIENCE, NUM_WORKERS, NUM_FOLDS,
     LOSS_WEIGHT_CE, LOSS_WEIGHT_DIVERSITY, LOSS_WEIGHT_MASKED,
     EMOTION_MAP, EMOTION_LABELS,
+    BACKBONE, PRETRAINED, DROPOUT, OPTIMIZER, SCHEDULER,
+    WEIGHT_DECAY, LABEL_SMOOTHING,
+    AUG_COLOR, AUG_GEOMETRIC, AUG_MIXUP,
 )
 from models import Model
 
@@ -61,6 +64,31 @@ def parse_args():
     parser.add_argument("--num_workers", type=int, default=NUM_WORKERS, help="DataLoader workers")
     parser.add_argument("--folds", type=int, default=NUM_FOLDS, help="K-Fold 折数")
     parser.add_argument("--patience", type=int, default=PATIENCE, help="早停耐心值")
+    # 模型架构
+    parser.add_argument("--backbone", type=str, default=BACKBONE,
+                        choices=["resnet18", "resnet34", "resnet50", "efficientnet-b0"],
+                        help="Backbone 架构")
+    parser.add_argument("--pretrained", type=str, default=PRETRAINED,
+                        choices=["msceleb", "imagenet", "none"],
+                        help="预训练类型")
+    parser.add_argument("--dropout", type=float, default=DROPOUT, help="Dropout 比率")
+    # 优化器 / 调度器
+    parser.add_argument("--optimizer", type=str, default=OPTIMIZER,
+                        choices=["adam", "adamw", "sgd"], help="优化器类型")
+    parser.add_argument("--scheduler", type=str, default=SCHEDULER,
+                        choices=["exponential", "cosine", "plateau", "step"],
+                        help="学习率调度器")
+    parser.add_argument("--weight_decay", type=float, default=WEIGHT_DECAY, help="权重衰减")
+    # 正则化
+    parser.add_argument("--label_smoothing", type=float, default=LABEL_SMOOTHING,
+                        help="标签平滑 (0.0 = 无)")
+    # 数据增强
+    parser.add_argument("--aug_color", action="store_true", default=AUG_COLOR,
+                        help="启用 ColorJitter 颜色增强")
+    parser.add_argument("--aug_geometric", action="store_true", default=AUG_GEOMETRIC,
+                        help="启用 RandomRotation + RandomAffine 几何增强")
+    parser.add_argument("--aug_mixup", action="store_true", default=AUG_MIXUP,
+                        help="启用 MixUp 样本混合增强")
     # 其他
     parser.add_argument("--device", type=str, default=None,
                         help="设备 (cuda:0 / cpu)，默认自动检测")
@@ -158,8 +186,36 @@ class KMU_FED(Dataset):
 
 # ===================== 训练一折 =====================
 def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)  #学习率衰减
+    # ---- 优化器 ----
+    if args.optimizer == 'adam':
+        optimizer = torch.optim.Adam(
+            model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    elif args.optimizer == 'adamw':
+        optimizer = torch.optim.AdamW(
+            model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    elif args.optimizer == 'sgd':
+        optimizer = torch.optim.SGD(
+            model.parameters(), lr=args.lr, momentum=0.9,
+            weight_decay=args.weight_decay, nesterov=True)
+    else:
+        raise ValueError(f"不支持的优化器: {args.optimizer}")
+
+    # ---- 调度器 ----
+    if args.scheduler == 'exponential':
+        scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
+    elif args.scheduler == 'cosine':
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=args.epochs)
+    elif args.scheduler == 'plateau':
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='max', patience=5, factor=0.5)
+    elif args.scheduler == 'step':
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer, step_size=15, gamma=0.5)
+    else:
+        raise ValueError(f"不支持的调度器: {args.scheduler}")
+    scheduler_name = args.scheduler  # for plateau special handling
+
     best_val_acc = 0.0
     patience_counter = 0  # 连续没有提升的轮数 达到阈值则停止训练
     fold_dir = os.path.join(args.output_dir, f"fold_{fold_idx}")
@@ -180,9 +236,11 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
         t0 = time.time()
         for imgs, labels in train_loader:
             imgs, labels = imgs.to(args.device), labels.to(args.device)
-            outputs, mc_loss = model(imgs, labels, phase='train')  # 前向传播
+            outputs, mc_loss = model(imgs, labels, phase='train')
 
-            loss_ce = F.cross_entropy(outputs, labels)  # 主分类交叉熵损失
+            # 支持 Label Smoothing
+            loss_ce = F.cross_entropy(
+                outputs, labels, label_smoothing=args.label_smoothing)
             if mc_loss is not None:
                 loss = (LOSS_WEIGHT_CE * loss_ce +
                         LOSS_WEIGHT_DIVERSITY * mc_loss[1] +
@@ -190,13 +248,13 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
                 mc0_val = mc_loss[0].item()
                 mc1_val = mc_loss[1].item()
             else:
-                loss = loss_ce  # 纯 ResNet 模式，无监督分支损失
+                loss = loss_ce  # 纯 backbone 模式，无监督分支损失
                 mc0_val = 0.0
                 mc1_val = 0.0
 
-            optimizer.zero_grad()  # 梯度清零
-            loss.backward()  # 反向传播
-            optimizer.step()  # 更新参数
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
             total_loss += loss.item()
             total_ce += loss_ce.item()
@@ -214,7 +272,7 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
         val_correct = 0
         val_total = 0
         val_loss_sum = 0.0
-        with torch.no_grad():  # 验证阶段不进行梯度计算
+        with torch.no_grad():
             for imgs, labels in val_loader:
                 imgs, labels = imgs.to(args.device), labels.to(args.device)
                 outputs = model(imgs, phase='test')
@@ -225,7 +283,12 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
 
         val_acc = val_correct / val_total
         val_loss = val_loss_sum / len(val_loader)
-        scheduler.step()  # 学习率衰减
+
+        # 调度器 step（plateau 需要 val_acc 参数）
+        if scheduler_name == 'plateau':
+            scheduler.step(val_acc)
+        else:
+            scheduler.step()
 
         # ---- 早停检查 ----
         if val_acc > best_val_acc:
@@ -278,20 +341,40 @@ def train_one_fold(model, train_loader, val_loader, fold_idx, args, writer):
 
 # ===================== 交叉验证主循环 =====================
 def run_cross_validation(args, writer):
-    train_transform = transforms.Compose([
+    # ---- 构建数据增强 ----
+    aug_list = [
         transforms.ToPILImage(),
         transforms.Resize(INPUT_SIZE),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         transforms.RandomHorizontalFlip(),
-        transforms.RandomErasing(scale=(0.02, 0.25)),
-    ])
+    ]
+    if args.aug_color:
+        aug_list.append(transforms.ColorJitter(
+            brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1))
+    if args.aug_geometric:
+        aug_list.append(transforms.RandomRotation(degrees=15))
+        aug_list.append(transforms.RandomAffine(
+            degrees=0, translate=(0.1, 0.1), scale=(0.9, 1.1)))
+    aug_list.append(transforms.RandomErasing(scale=(0.02, 0.25)))
+    train_transform = transforms.Compose(aug_list)
+
     val_transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.Resize(INPUT_SIZE),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
+
+    # 打印增强配置
+    aug_info = "RandomHorizontalFlip + RandomErasing"
+    if args.aug_color:
+        aug_info += " + ColorJitter"
+    if args.aug_geometric:
+        aug_info += " + Rotation/Affine"
+    if args.aug_mixup:
+        aug_info += " + MixUp"
+    print(f"训练增强: {aug_info}")
 
     # 加载人脸检测器
     yolo_detector = None
@@ -407,6 +490,9 @@ def run_cross_validation(args, writer):
             device=args.device,
             use_clip=not args.no_clip,
             lightweight_encoder=args.lightweight_encoder,
+            backbone=args.backbone,
+            pretrained=args.pretrained,
+            dropout=args.dropout,
         ).to(args.device)
 
         best_acc, fold_history = train_one_fold(
@@ -462,6 +548,18 @@ def run_cross_validation(args, writer):
             "batch_size": args.batch_size,
             "lr": args.lr,
             "folds": len(fold_list),
+            "backbone": args.backbone,
+            "pretrained": args.pretrained,
+            "dropout": args.dropout,
+            "optimizer": args.optimizer,
+            "scheduler": args.scheduler,
+            "weight_decay": args.weight_decay,
+            "label_smoothing": args.label_smoothing,
+            "aug_color": args.aug_color,
+            "aug_geometric": args.aug_geometric,
+            "aug_mixup": args.aug_mixup,
+            "use_clip": not args.no_clip,
+            "clip_layers": args.clip_layers,
         },
         "fold_results": {f"fold_{i+1}": acc for i, acc in enumerate(fold_accs)},
         "subject_results": subject_accs,
@@ -499,13 +597,20 @@ if __name__ == "__main__":
         reduce_clip_layers(clip_model, args.clip_layers)
         print(f"🔧 CLIP 层数已调整为: {args.clip_layers}")
 
-    # 轻量化：不加载 CLIP 图像编码器参数（用 ResNet-only 或 MobileNetV3）
-    if args.no_clip:
-        print("🔧 模式: 纯 ResNet-18（不使用 CLIP）")
-    elif args.lightweight_encoder == "mobilenet_v3":
-        print("🔧 模式: MobileNetV3 替代 CLIP")
+    # 处理 pretrained=none（不使用预训练权重）
+    if args.pretrained == "none":
+        args.resnet_pretrained = None
+
+    # 打印模型配置摘要
+    clp_status = "无 CLIP" if args.no_clip else f"CLIP-{args.clip_layers or 12}层"
+    if args.lightweight_encoder == "mobilenet_v3":
+        clp_status = "MobileNetV3"
     elif args.clip_text_mode:
-        print("🔧 模式: CLIP 文本编码器辅助")
+        clp_status = "CLIP 文本辅助"
+    print(f"🔧 配置: Backbone={args.backbone} | 预训练={args.pretrained} | "
+          f"CLIP={clp_status} | Dropout={args.dropout}")
+    print(f"🔧 优化器: {args.optimizer} | 调度器: {args.scheduler} | "
+          f"LR={args.lr} | WD={args.weight_decay} | LabelSmooth={args.label_smoothing}")
 
     # TensorBoard
     if args.no_tensorboard:

@@ -66,11 +66,29 @@ PATIENCE = 10  # 10轮没有提升就停止
 NUM_WORKERS = 0
 NUM_FOLDS = 10
 
-# 损失权重
-LOSS_WEIGHT_CE = 1.0       # 交叉熵损失
+# ==================== 模型架构选择 ====================
+BACKBONE = "resnet18"        # resnet18 | resnet34 | resnet50 | efficientnet-b0
+PRETRAINED = "msceleb"        # msceleb | imagenet | none
+DROPOUT = 0.0                  # Dropout 比率 (0.0 = 无)
+
+# ==================== 优化器 / 调度器 ====================
+OPTIMIZER = "adam"             # adam | adamw | sgd
+SCHEDULER = "exponential"      # exponential | cosine | plateau | step
+WEIGHT_DECAY = 1e-4            # L2 权重衰减
+
+# ==================== 损失权重 ====================
+LOSS_WEIGHT_CE = 1.0           # 交叉熵损失
 LOSS_WEIGHT_DIVERSITY = 5.0   # mc_loss[1] 特征多样性
 # 比下面参数高 说明作认为 防止特征集中比分类准确更加重要
 LOSS_WEIGHT_MASKED = 1.5      # mc_loss[0] 掩码特征交叉熵
+
+# ==================== 正则化 ====================
+LABEL_SMOOTHING = 0.0          # 标签平滑 (0.0 = 无, 推荐 0.1)
+
+# ==================== 数据增强 ====================
+AUG_COLOR = False              # ColorJitter 颜色增强
+AUG_GEOMETRIC = False          # RandomRotation + RandomAffine 几何增强
+AUG_MIXUP = False              # MixUp 样本混合增强
 
 # ==================== 表情映射 ====================
 EMOTION_MAP = {

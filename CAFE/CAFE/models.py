@@ -187,26 +187,31 @@ class Model(nn.Module):
     CAFE (CLIP-Assisted Facial Expression) 模型。
 
     架构：
-      1. ResNet-18（MSCeleb 预训练）提取面部特征
-      2. CLIP ViT-B-32（冻结）并行编码图像
-      3. sigmoid(ResNet特征) 逐元素门控 CLIP 特征
-      4. 全连接层输出分类评分
+      1. Backbone（ResNet/EfficientNet）提取面部特征
+      2. CLIP ViT-B-32（冻结）或轻量编码器并行编码图像
+      3. sigmoid(backbone特征) 逐元素门控 外部特征
+      4. Dropout + 全连接层输出分类评分
 
     训练模式下额外输出 MC_loss（监督分支损失）。
 
     支持模式：
       - use_clip=True:  标准 CAFE 双路融合
-      - use_clip=False: 纯 ResNet-18（CLIP 分支移除）
+      - use_clip=False: 纯 backbone（CLIP 分支移除）
       - lightweight_encoder="mobilenet_v3": MobileNetV3 替代 CLIP
+      - backbone="resnet18"/"resnet34"/"resnet50"/"efficientnet-b0"
+      - pretrained="msceleb"/"imagenet"/None
     """
     def __init__(self, clip_model, num_classes=7, resnet_pretrained_path=None,
-                 device='cpu', use_clip=True, lightweight_encoder=None):
+                 device='cpu', use_clip=True, lightweight_encoder=None,
+                 backbone='resnet18', pretrained='msceleb', dropout=0.0):
         super(Model, self).__init__()
 
         self.clip_model = clip_model if use_clip else None
         self.device = device
         self.use_clip = use_clip
         self.lightweight_encoder_name = lightweight_encoder
+        self.backbone_name = backbone
+        self.pretrained_name = pretrained
 
         # 轻量编码器（替代 CLIP）
         if lightweight_encoder == "mobilenet_v3":
@@ -216,20 +221,63 @@ class Model(nn.Module):
         else:
             self.alt_encoder = None
 
-        res18 = ResNet(block=BasicBlock, n_blocks=[2, 2, 2, 2],
-                       channels=[64, 128, 256, 512], output_dim=1000)
+        # ========== Backbone 选择 ==========
+        use_torchvision = (backbone != 'resnet18') or (pretrained != 'msceleb')
 
-        # 这里相当于是迁移学习
-        if resnet_pretrained_path is not None:
-            msceleb_model = torch.load(resnet_pretrained_path, map_location=device)
-            state_dict = msceleb_model['state_dict']  # 加载训练结构一样的预处理模型
-            res18.load_state_dict(state_dict, strict=False)  # 如果有不匹配的层 就跳过不报错 然进行随机初始化
+        if not use_torchvision:
+            # --- 原有路径: 自定义 ResNet-18 + MSCeleb 预训练 ---
+            res18 = ResNet(block=BasicBlock, n_blocks=[2, 2, 2, 2],
+                           channels=[64, 128, 256, 512], output_dim=1000)
 
-        self.features = nn.Sequential(*list(res18.children())[:-2])  # 去掉最后两层 也就是fc和avgpool层
-        self.features2 = nn.Sequential(*list(res18.children())[-2:-1])  # 取出avgpool层
+            if resnet_pretrained_path is not None:
+                msceleb_model = torch.load(resnet_pretrained_path, map_location=device)
+                state_dict = msceleb_model['state_dict']
+                res18.load_state_dict(state_dict, strict=False)
 
-        fc_in_dim = list(res18.children())[-1].in_features  # = 512  # 获取新的512维度的六种表情
-        self.fc = nn.Linear(fc_in_dim, num_classes)  # 去掉预训练的旧分类头 换成新的上面获取的新的分类头
+            self.features = nn.Sequential(*list(res18.children())[:-2])
+            self.features2 = nn.Sequential(*list(res18.children())[-2:-1])
+            fc_in_dim = list(res18.children())[-1].in_features  # 512
+            print(f"  🏗️  Backbone: ResNet-18 (MSCeleb 预训练)")
+
+        else:
+            # --- Torchvision backbone (resnet18/34/50/efficientnet) ---
+            from backbones import create_torchvision_backbone
+            tv_pretrained = (pretrained == 'imagenet')
+            tv_pretrained_path = resnet_pretrained_path if pretrained == 'msceleb' else None
+
+            self.features, self.features2, fc_in_dim = create_torchvision_backbone(
+                arch=backbone,
+                pretrained=tv_pretrained,
+                pretrained_path=tv_pretrained_path,
+                device=device
+            )
+
+            pretrained_label = pretrained if pretrained else '无预训练'
+            print(f"  🏗️  Backbone: {backbone} ({pretrained_label})")
+            print(f"       特征维度: {fc_in_dim}")
+
+        # ========== 分类头 ==========
+        # Dropout 防止过拟合
+        self.dropout = nn.Dropout(dropout) if dropout > 0 else nn.Identity()
+
+        # FC 分类层
+        if fc_in_dim != 512 and not use_clip and lightweight_encoder is None:
+            # 纯 backbone 模式且维度不匹配 512: 使用投影层
+            self.projector = nn.Sequential(
+                nn.Linear(fc_in_dim, 512),
+                nn.BatchNorm1d(512),
+                nn.ReLU(inplace=True),
+            )
+            self.fc = nn.Linear(512, num_classes)
+            print(f"       投影层: {fc_in_dim} → 512 → {num_classes}")
+        else:
+            self.projector = None
+            self.fc = nn.Linear(fc_in_dim, num_classes)
+
+        # 打印参数信息
+        total_backbone = sum(p.numel() for p in self.features.parameters())
+        total_backbone += sum(p.numel() for p in self.features2.parameters())
+        print(f"       Backbone 参数: {total_backbone/1e6:.1f}M")
 
     def _get_image_features(self, x):
         """获取外部视觉语义特征（CLIP 或轻量编码器）。"""
@@ -252,22 +300,29 @@ class Model(nn.Module):
         x = self.features2(x)
         x = x.view(x.size(0), -1)  # 展平
 
-        # 门控融合或纯 ResNet
+        # 投影层（当 backbone 输出维度 ≠ 512 且无外部特征时使用）
+        if self.projector is not None:
+            x = self.projector(x)
+
+        # 门控融合或纯 backbone
         if image_features is not None:
             fused = image_features * torch.sigmoid(x)
         else:
-            fused = x  # 纯 ResNet 模式，直接使用 ResNet 特征
+            fused = x  # 纯 backbone 模式，直接使用 backbone 特征
 
         MC_loss = None
         if phase == 'train' and image_features is not None:
             MC_loss = supervisor(
                 fused,
                 targets, cnum=73, device=self.device
-            )  # 门控融合 用来决定激活哪些语义维度
+            )
 
-        out = self.fc(fused)  # 每一个类别一个分数 取最大的就是预测结果
+        # Dropout 正则化
+        fused = self.dropout(fused)
+
+        out = self.fc(fused)
 
         if phase == 'train':
             return out, MC_loss
         else:
-            return out  # 只要分类结果
+            return out
