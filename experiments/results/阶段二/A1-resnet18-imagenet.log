@@ -1,0 +1,8 @@
+🖥️  设备: cuda:0
+✅ CLIP 模型加载成功: D:\MM_Emotion\2_FER\CAFE\CAFE\clip\ViT-B-32.pt
+🔧 配置: Backbone=resnet18 | 预训练=imagenet | CLIP=无 CLIP | Dropout=0.0
+🔧 优化器: adam | 调度器: exponential | LR=0.0002 | WD=0.0001 | LabelSmooth=0.0
+📈 TensorBoard 日志: ../../KMU-FED/output_exp2_a1\tensorboard\20260715_113137
+训练增强: RandomHorizontalFlip + RandomErasing
+人脸检测: YOLO 已加载 (../../yolov8n.pt)
+人脸检测: Haar Cascade 已加载
