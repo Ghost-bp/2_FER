@@ -1,0 +1,412 @@
+🖥️  设备: cuda:0
+✅ CLIP 模型加载成功: D:\MM_Emotion\2_FER\CAFE\CAFE\clip\ViT-B-32.pt
+🔧 配置: Backbone=resnet50 | 预训练=imagenet | CLIP=无 CLIP | Dropout=0.0
+🔧 优化器: adamw | 调度器: cosine | LR=0.0002 | WD=0.001 | LabelSmooth=0.0
+📈 TensorBoard 日志: ../../KMU-FED/output_exp2_d4\tensorboard\20260717_024801
+训练增强: RandomHorizontalFlip + RandomErasing
+人脸检测: YOLO 已加载 (../../yolov8n.pt)
+人脸检测: YOLO-only 模式 (不加载 Haar)
+
+============================================================
+  数据集分析
+============================================================
+  数据集: D:\MM_Emotion\2_FER\CAFE\CAFE\..\..\KMU-FED\KMU-FED
+  受试者总数: 12
+  图片总数: 1106
+  类别数: 6
+         angry (id=0):  196 ###################
+       disgust (id=1):  120 ############
+          fear (id=2):  200 ####################
+         happy (id=3):  210 #####################
+           sad (id=4):  180 ##################
+      surprise (id=5):  200 ####################
+
+  每受试者图片数:
+    受试者 1: 126 张  [A:26, D:20, F:20, H:20, S:20, S:20]
+    受试者 2:  60 张  [A:10, F:20, H:10, S:20]
+    受试者 3:  90 张  [A:10, F:20, H:20, S:20, S:20]
+    受试者 4:  60 张  [F:20, H:20, S:10, S:10]
+    受试者 5: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 6: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 7: 100 张  [A:20, F:20, H:20, S:20, S:20]
+    受试者 8: 110 张  [A:20, D:20, F:10, H:20, S:20, S:20]
+    受试者 9:  70 张  [A:20, F:10, H:20, S:10, S:10]
+    受试者 10:  80 张  [A:10, D:10, F:20, H:20, S:20]
+    受试者 11: 100 张  [A:20, D:20, F:20, S:20, S:20]
+    受试者 12:  70 张  [A:20, D:10, H:20, S:20]
+============================================================
+
+评估方法: LOSO (12 folds)
+总轮次: 12
+
+============================================================
+  Fold 1/12: 1
+  验证受试者: 1 (126 张)
+  验证表情分布: {0: 26, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 980 张 | 验证: 126 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 1 Epoch  1 | Train Loss:0.6883 Acc:0.7500 | Val Loss:1.5832 Acc:0.4524 | Time:20s
+Fold 1 Epoch  2 | Train Loss:0.2025 Acc:0.9398 | Val Loss:1.2512 Acc:0.5556 | Time:21s
+Fold 1 Epoch  3 | Train Loss:0.1290 Acc:0.9582 | Val Loss:1.7701 Acc:0.3651 | Time:20s
+Fold 1 Epoch  4 | Train Loss:0.0983 Acc:0.9724 | Val Loss:1.5135 Acc:0.5714 | Time:21s
+Fold 1 Epoch  5 | Train Loss:0.1023 Acc:0.9714 | Val Loss:1.2801 Acc:0.4683 | Time:20s
+Fold 1 Epoch  6 | Train Loss:0.0789 Acc:0.9786 | Val Loss:1.1980 Acc:0.6508 | Time:21s
+Fold 1 Epoch  7 | Train Loss:0.0649 Acc:0.9806 | Val Loss:0.9628 Acc:0.6587 | Time:20s
+Fold 1 Epoch  8 | Train Loss:0.0565 Acc:0.9827 | Val Loss:0.9009 Acc:0.6825 | Time:21s
+Fold 1 Epoch  9 | Train Loss:0.1047 Acc:0.9673 | Val Loss:1.5297 Acc:0.4683 | Time:20s
+Fold 1 Epoch 10 | Train Loss:0.0585 Acc:0.9827 | Val Loss:2.1429 Acc:0.5317 | Time:20s
+Fold 1 Epoch 11 | Train Loss:0.0294 Acc:0.9939 | Val Loss:1.9874 Acc:0.3016 | Time:20s
+Fold 1 Epoch 12 | Train Loss:0.0183 Acc:0.9980 | Val Loss:2.1333 Acc:0.4286 | Time:21s
+Fold 1 Epoch 13 | Train Loss:0.0237 Acc:0.9929 | Val Loss:1.6485 Acc:0.4762 | Time:20s
+Fold 1 Epoch 14 | Train Loss:0.0281 Acc:0.9949 | Val Loss:1.5918 Acc:0.4365 | Time:21s
+Fold 1 Epoch 15 | Train Loss:0.0436 Acc:0.9867 | Val Loss:2.2421 Acc:0.4206 | Time:21s
+Fold 1 Epoch 16 | Train Loss:0.0422 Acc:0.9898 | Val Loss:1.8185 Acc:0.4603 | Time:20s
+Fold 1 Epoch 17 | Train Loss:0.0202 Acc:0.9949 | Val Loss:2.0062 Acc:0.5159 | Time:21s
+Fold 1 Epoch 18 | Train Loss:0.0195 Acc:0.9959 | Val Loss:2.4114 Acc:0.4603 | Time:21s
+  ⏹ 早停于 Epoch 18（10 轮未提升）
+  ✅ Fold1 Best Val Acc: 0.6825
+
+============================================================
+  Fold 2/12: 2
+  验证受试者: 2 (60 张)
+  验证表情分布: {0: 10, 2: 20, 3: 10, 5: 20}
+  训练: 1046 张 | 验证: 60 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 2 Epoch  1 | Train Loss:0.7031 Acc:0.7533 | Val Loss:1.4249 Acc:0.5000 | Time:22s
+Fold 2 Epoch  2 | Train Loss:0.2162 Acc:0.9369 | Val Loss:1.1446 Acc:0.6667 | Time:22s
+Fold 2 Epoch  3 | Train Loss:0.1349 Acc:0.9598 | Val Loss:0.5530 Acc:0.7000 | Time:22s
+Fold 2 Epoch  4 | Train Loss:0.1198 Acc:0.9694 | Val Loss:1.0781 Acc:0.5833 | Time:22s
+Fold 2 Epoch  5 | Train Loss:0.0822 Acc:0.9809 | Val Loss:0.8626 Acc:0.6333 | Time:22s
+Fold 2 Epoch  6 | Train Loss:0.0817 Acc:0.9761 | Val Loss:1.2396 Acc:0.6667 | Time:21s
+Fold 2 Epoch  7 | Train Loss:0.0878 Acc:0.9665 | Val Loss:1.7659 Acc:0.3667 | Time:22s
+Fold 2 Epoch  8 | Train Loss:0.0781 Acc:0.9809 | Val Loss:0.9700 Acc:0.5000 | Time:22s
+Fold 2 Epoch  9 | Train Loss:0.0581 Acc:0.9828 | Val Loss:1.3638 Acc:0.6667 | Time:22s
+Fold 2 Epoch 10 | Train Loss:0.0598 Acc:0.9847 | Val Loss:1.3996 Acc:0.5000 | Time:22s
+Fold 2 Epoch 11 | Train Loss:0.0406 Acc:0.9876 | Val Loss:1.5934 Acc:0.4667 | Time:22s
+Fold 2 Epoch 12 | Train Loss:0.0409 Acc:0.9866 | Val Loss:0.6397 Acc:0.6833 | Time:22s
+Fold 2 Epoch 13 | Train Loss:0.0464 Acc:0.9876 | Val Loss:1.6209 Acc:0.4833 | Time:23s
+  ⏹ 早停于 Epoch 13（10 轮未提升）
+  ✅ Fold2 Best Val Acc: 0.7000
+
+============================================================
+  Fold 3/12: 3
+  验证受试者: 3 (90 张)
+  验证表情分布: {0: 10, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 1016 张 | 验证: 90 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 3 Epoch  1 | Train Loss:0.7013 Acc:0.7559 | Val Loss:1.0360 Acc:0.6333 | Time:22s
+Fold 3 Epoch  2 | Train Loss:0.1846 Acc:0.9360 | Val Loss:0.5594 Acc:0.8333 | Time:22s
+Fold 3 Epoch  3 | Train Loss:0.1331 Acc:0.9587 | Val Loss:0.5228 Acc:0.8333 | Time:22s
+Fold 3 Epoch  4 | Train Loss:0.1044 Acc:0.9705 | Val Loss:0.6384 Acc:0.7667 | Time:23s
+Fold 3 Epoch  5 | Train Loss:0.0715 Acc:0.9852 | Val Loss:0.6900 Acc:0.8667 | Time:21s
+Fold 3 Epoch  6 | Train Loss:0.0498 Acc:0.9892 | Val Loss:0.3253 Acc:0.9111 | Time:21s
+Fold 3 Epoch  7 | Train Loss:0.0573 Acc:0.9823 | Val Loss:0.5203 Acc:0.8222 | Time:22s
+Fold 3 Epoch  8 | Train Loss:0.0591 Acc:0.9852 | Val Loss:0.3562 Acc:0.9000 | Time:21s
+Fold 3 Epoch  9 | Train Loss:0.0664 Acc:0.9843 | Val Loss:0.9246 Acc:0.6556 | Time:22s
+Fold 3 Epoch 10 | Train Loss:0.0431 Acc:0.9882 | Val Loss:1.1850 Acc:0.7000 | Time:22s
+Fold 3 Epoch 11 | Train Loss:0.0471 Acc:0.9882 | Val Loss:0.8288 Acc:0.6444 | Time:20s
+Fold 3 Epoch 12 | Train Loss:0.0786 Acc:0.9724 | Val Loss:0.8402 Acc:0.7222 | Time:21s
+Fold 3 Epoch 13 | Train Loss:0.0589 Acc:0.9813 | Val Loss:0.6594 Acc:0.7444 | Time:22s
+Fold 3 Epoch 14 | Train Loss:0.0457 Acc:0.9862 | Val Loss:0.3570 Acc:0.8222 | Time:21s
+Fold 3 Epoch 15 | Train Loss:0.0273 Acc:0.9941 | Val Loss:0.5067 Acc:0.7778 | Time:21s
+Fold 3 Epoch 16 | Train Loss:0.0226 Acc:0.9941 | Val Loss:0.7724 Acc:0.7444 | Time:21s
+  ⏹ 早停于 Epoch 16（10 轮未提升）
+  ✅ Fold3 Best Val Acc: 0.9111
+
+============================================================
+  Fold 4/12: 4
+  验证受试者: 4 (60 张)
+  验证表情分布: {2: 20, 3: 20, 4: 10, 5: 10}
+  训练: 1046 张 | 验证: 60 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 4 Epoch  1 | Train Loss:0.7175 Acc:0.7438 | Val Loss:0.6887 Acc:0.7333 | Time:22s
+Fold 4 Epoch  2 | Train Loss:0.2043 Acc:0.9293 | Val Loss:0.8728 Acc:0.7667 | Time:22s
+Fold 4 Epoch  3 | Train Loss:0.1193 Acc:0.9637 | Val Loss:0.3524 Acc:0.9167 | Time:22s
+Fold 4 Epoch  4 | Train Loss:0.0943 Acc:0.9704 | Val Loss:1.3699 Acc:0.6500 | Time:22s
+Fold 4 Epoch  5 | Train Loss:0.0919 Acc:0.9723 | Val Loss:1.1988 Acc:0.5333 | Time:23s
+Fold 4 Epoch  6 | Train Loss:0.0633 Acc:0.9847 | Val Loss:1.4507 Acc:0.4833 | Time:21s
+Fold 4 Epoch  7 | Train Loss:0.0634 Acc:0.9837 | Val Loss:2.1369 Acc:0.4167 | Time:22s
+Fold 4 Epoch  8 | Train Loss:0.0427 Acc:0.9895 | Val Loss:0.8992 Acc:0.6833 | Time:22s
+Fold 4 Epoch  9 | Train Loss:0.0567 Acc:0.9847 | Val Loss:2.8154 Acc:0.2500 | Time:21s
+Fold 4 Epoch 10 | Train Loss:0.0423 Acc:0.9943 | Val Loss:1.3003 Acc:0.4500 | Time:22s
+Fold 4 Epoch 11 | Train Loss:0.0469 Acc:0.9885 | Val Loss:1.2437 Acc:0.5167 | Time:22s
+Fold 4 Epoch 12 | Train Loss:0.0483 Acc:0.9866 | Val Loss:1.7208 Acc:0.4500 | Time:22s
+Fold 4 Epoch 13 | Train Loss:0.0436 Acc:0.9847 | Val Loss:1.0308 Acc:0.6333 | Time:22s
+  ⏹ 早停于 Epoch 13（10 轮未提升）
+  ✅ Fold4 Best Val Acc: 0.9167
+
+============================================================
+  Fold 5/12: 5
+  验证受试者: 5 (120 张)
+  验证表情分布: {0: 20, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 986 张 | 验证: 120 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 5 Epoch  1 | Train Loss:0.7119 Acc:0.7535 | Val Loss:0.5883 Acc:0.8250 | Time:21s
+Fold 5 Epoch  2 | Train Loss:0.2465 Acc:0.9138 | Val Loss:0.5116 Acc:0.8500 | Time:21s
+Fold 5 Epoch  3 | Train Loss:0.1394 Acc:0.9574 | Val Loss:0.4068 Acc:0.9000 | Time:20s
+Fold 5 Epoch  4 | Train Loss:0.0950 Acc:0.9767 | Val Loss:0.4958 Acc:0.8167 | Time:20s
+Fold 5 Epoch  5 | Train Loss:0.1021 Acc:0.9706 | Val Loss:0.5347 Acc:0.8250 | Time:21s
+Fold 5 Epoch  6 | Train Loss:0.0901 Acc:0.9817 | Val Loss:0.9783 Acc:0.6667 | Time:21s
+Fold 5 Epoch  7 | Train Loss:0.0526 Acc:0.9868 | Val Loss:0.5158 Acc:0.8500 | Time:21s
+Fold 5 Epoch  8 | Train Loss:0.0345 Acc:0.9899 | Val Loss:0.5961 Acc:0.7167 | Time:21s
+Fold 5 Epoch  9 | Train Loss:0.0350 Acc:0.9919 | Val Loss:0.5159 Acc:0.8167 | Time:21s
+Fold 5 Epoch 10 | Train Loss:0.0361 Acc:0.9919 | Val Loss:0.4110 Acc:0.8417 | Time:20s
+Fold 5 Epoch 11 | Train Loss:0.0685 Acc:0.9807 | Val Loss:1.3708 Acc:0.5417 | Time:20s
+Fold 5 Epoch 12 | Train Loss:0.0897 Acc:0.9757 | Val Loss:1.0997 Acc:0.7250 | Time:21s
+Fold 5 Epoch 13 | Train Loss:0.0646 Acc:0.9797 | Val Loss:0.5727 Acc:0.8917 | Time:21s
+  ⏹ 早停于 Epoch 13（10 轮未提升）
+  ✅ Fold5 Best Val Acc: 0.9000
+
+============================================================
+  Fold 6/12: 6
+  验证受试者: 6 (120 张)
+  验证表情分布: {0: 20, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 986 张 | 验证: 120 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 6 Epoch  1 | Train Loss:0.7076 Acc:0.7485 | Val Loss:1.0540 Acc:0.7083 | Time:21s
+Fold 6 Epoch  2 | Train Loss:0.1871 Acc:0.9381 | Val Loss:0.8831 Acc:0.6750 | Time:21s
+Fold 6 Epoch  3 | Train Loss:0.1325 Acc:0.9574 | Val Loss:1.0720 Acc:0.6000 | Time:21s
+Fold 6 Epoch  4 | Train Loss:0.1310 Acc:0.9594 | Val Loss:1.1998 Acc:0.5833 | Time:21s
+Fold 6 Epoch  5 | Train Loss:0.0977 Acc:0.9716 | Val Loss:1.4046 Acc:0.5167 | Time:21s
+Fold 6 Epoch  6 | Train Loss:0.0786 Acc:0.9757 | Val Loss:1.5152 Acc:0.5833 | Time:21s
+Fold 6 Epoch  7 | Train Loss:0.0528 Acc:0.9858 | Val Loss:1.5916 Acc:0.4750 | Time:22s
+Fold 6 Epoch  8 | Train Loss:0.0340 Acc:0.9939 | Val Loss:1.6520 Acc:0.3917 | Time:21s
+Fold 6 Epoch  9 | Train Loss:0.0351 Acc:0.9909 | Val Loss:1.2282 Acc:0.5417 | Time:20s
+Fold 6 Epoch 10 | Train Loss:0.0278 Acc:0.9929 | Val Loss:1.1192 Acc:0.5917 | Time:22s
+Fold 6 Epoch 11 | Train Loss:0.0392 Acc:0.9909 | Val Loss:1.7729 Acc:0.4583 | Time:20s
+  ⏹ 早停于 Epoch 11（10 轮未提升）
+  ✅ Fold6 Best Val Acc: 0.7083
+
+============================================================
+  Fold 7/12: 7
+  验证受试者: 7 (100 张)
+  验证表情分布: {0: 20, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 1006 张 | 验证: 100 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 7 Epoch  1 | Train Loss:0.7298 Acc:0.7386 | Val Loss:0.9261 Acc:0.5700 | Time:21s
+Fold 7 Epoch  2 | Train Loss:0.1658 Acc:0.9523 | Val Loss:0.7429 Acc:0.7800 | Time:21s
+Fold 7 Epoch  3 | Train Loss:0.1051 Acc:0.9742 | Val Loss:1.2276 Acc:0.6000 | Time:22s
+Fold 7 Epoch  4 | Train Loss:0.1081 Acc:0.9682 | Val Loss:1.0645 Acc:0.5400 | Time:21s
+Fold 7 Epoch  5 | Train Loss:0.0781 Acc:0.9761 | Val Loss:1.1097 Acc:0.5000 | Time:21s
+Fold 7 Epoch  6 | Train Loss:0.0885 Acc:0.9801 | Val Loss:0.7862 Acc:0.7000 | Time:22s
+Fold 7 Epoch  7 | Train Loss:0.0832 Acc:0.9712 | Val Loss:1.1529 Acc:0.4300 | Time:22s
+Fold 7 Epoch  8 | Train Loss:0.0582 Acc:0.9861 | Val Loss:0.7898 Acc:0.7000 | Time:21s
+Fold 7 Epoch  9 | Train Loss:0.0476 Acc:0.9871 | Val Loss:1.0804 Acc:0.7100 | Time:21s
+Fold 7 Epoch 10 | Train Loss:0.0415 Acc:0.9881 | Val Loss:1.2684 Acc:0.3300 | Time:21s
+Fold 7 Epoch 11 | Train Loss:0.0371 Acc:0.9881 | Val Loss:1.3492 Acc:0.4900 | Time:21s
+Fold 7 Epoch 12 | Train Loss:0.0382 Acc:0.9930 | Val Loss:1.0465 Acc:0.5600 | Time:21s
+  ⏹ 早停于 Epoch 12（10 轮未提升）
+  ✅ Fold7 Best Val Acc: 0.7800
+
+============================================================
+  Fold 8/12: 8
+  验证受试者: 8 (110 张)
+  验证表情分布: {0: 20, 1: 20, 2: 10, 3: 20, 4: 20, 5: 20}
+  训练: 996 张 | 验证: 110 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 8 Epoch  1 | Train Loss:0.7161 Acc:0.7359 | Val Loss:0.4386 Acc:0.9364 | Time:21s
+Fold 8 Epoch  2 | Train Loss:0.2243 Acc:0.9267 | Val Loss:0.5672 Acc:0.7364 | Time:21s
+Fold 8 Epoch  3 | Train Loss:0.1571 Acc:0.9568 | Val Loss:0.5856 Acc:0.6909 | Time:20s
+Fold 8 Epoch  4 | Train Loss:0.1494 Acc:0.9568 | Val Loss:0.4874 Acc:0.8364 | Time:21s
+Fold 8 Epoch  5 | Train Loss:0.0739 Acc:0.9819 | Val Loss:0.9151 Acc:0.6364 | Time:21s
+Fold 8 Epoch  6 | Train Loss:0.1033 Acc:0.9719 | Val Loss:0.6991 Acc:0.6727 | Time:20s
+Fold 8 Epoch  7 | Train Loss:0.1659 Acc:0.9458 | Val Loss:0.4505 Acc:0.8182 | Time:20s
+Fold 8 Epoch  8 | Train Loss:0.1493 Acc:0.9618 | Val Loss:0.5973 Acc:0.7091 | Time:21s
+Fold 8 Epoch  9 | Train Loss:0.1056 Acc:0.9669 | Val Loss:0.7293 Acc:0.7273 | Time:21s
+Fold 8 Epoch 10 | Train Loss:0.0975 Acc:0.9739 | Val Loss:1.1177 Acc:0.6364 | Time:21s
+Fold 8 Epoch 11 | Train Loss:0.1349 Acc:0.9598 | Val Loss:0.6910 Acc:0.7273 | Time:22s
+  ⏹ 早停于 Epoch 11（10 轮未提升）
+  ✅ Fold8 Best Val Acc: 0.9364
+
+============================================================
+  Fold 9/12: 9
+  验证受试者: 9 (70 张)
+  验证表情分布: {0: 20, 2: 10, 3: 20, 4: 10, 5: 10}
+  训练: 1036 张 | 验证: 70 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 9 Epoch  1 | Train Loss:0.7186 Acc:0.7481 | Val Loss:0.7527 Acc:0.5857 | Time:22s
+Fold 9 Epoch  2 | Train Loss:0.2065 Acc:0.9411 | Val Loss:0.5197 Acc:0.7143 | Time:23s
+Fold 9 Epoch  3 | Train Loss:0.1466 Acc:0.9556 | Val Loss:0.7807 Acc:0.6143 | Time:22s
+Fold 9 Epoch  4 | Train Loss:0.1254 Acc:0.9575 | Val Loss:0.7392 Acc:0.5571 | Time:22s
+Fold 9 Epoch  5 | Train Loss:0.1074 Acc:0.9710 | Val Loss:0.9090 Acc:0.7143 | Time:22s
+Fold 9 Epoch  6 | Train Loss:0.1036 Acc:0.9681 | Val Loss:0.7627 Acc:0.7143 | Time:22s
+Fold 9 Epoch  7 | Train Loss:0.1011 Acc:0.9691 | Val Loss:2.1588 Acc:0.5714 | Time:22s
+Fold 9 Epoch  8 | Train Loss:0.0754 Acc:0.9788 | Val Loss:1.0841 Acc:0.4286 | Time:22s
+Fold 9 Epoch  9 | Train Loss:0.0298 Acc:0.9913 | Val Loss:0.5597 Acc:0.7571 | Time:22s
+Fold 9 Epoch 10 | Train Loss:0.0353 Acc:0.9913 | Val Loss:1.2206 Acc:0.6143 | Time:22s
+Fold 9 Epoch 11 | Train Loss:0.0451 Acc:0.9903 | Val Loss:0.4162 Acc:0.8429 | Time:22s
+Fold 9 Epoch 12 | Train Loss:0.0657 Acc:0.9817 | Val Loss:0.4955 Acc:0.7571 | Time:22s
+Fold 9 Epoch 13 | Train Loss:0.0365 Acc:0.9894 | Val Loss:0.5527 Acc:0.7286 | Time:22s
+Fold 9 Epoch 14 | Train Loss:0.0399 Acc:0.9903 | Val Loss:0.7820 Acc:0.6143 | Time:21s
+Fold 9 Epoch 15 | Train Loss:0.0356 Acc:0.9903 | Val Loss:0.5155 Acc:0.7429 | Time:22s
+Fold 9 Epoch 16 | Train Loss:0.0631 Acc:0.9826 | Val Loss:0.7842 Acc:0.6571 | Time:22s
+Fold 9 Epoch 17 | Train Loss:0.0345 Acc:0.9855 | Val Loss:0.6425 Acc:0.8143 | Time:22s
+Fold 9 Epoch 18 | Train Loss:0.0335 Acc:0.9961 | Val Loss:0.4393 Acc:0.7571 | Time:22s
+Fold 9 Epoch 19 | Train Loss:0.0162 Acc:0.9981 | Val Loss:1.1717 Acc:0.5714 | Time:22s
+Fold 9 Epoch 20 | Train Loss:0.0190 Acc:0.9942 | Val Loss:0.7750 Acc:0.7714 | Time:22s
+Fold 9 Epoch 21 | Train Loss:0.0123 Acc:0.9971 | Val Loss:0.5676 Acc:0.8571 | Time:22s
+Fold 9 Epoch 22 | Train Loss:0.0150 Acc:0.9942 | Val Loss:0.7578 Acc:0.7571 | Time:22s
+Fold 9 Epoch 23 | Train Loss:0.0068 Acc:0.9990 | Val Loss:0.6758 Acc:0.7857 | Time:23s
+Fold 9 Epoch 24 | Train Loss:0.0038 Acc:1.0000 | Val Loss:0.6160 Acc:0.8571 | Time:21s
+Fold 9 Epoch 25 | Train Loss:0.0049 Acc:1.0000 | Val Loss:0.6180 Acc:0.8143 | Time:21s
+Fold 9 Epoch 26 | Train Loss:0.0086 Acc:0.9961 | Val Loss:0.7073 Acc:0.7143 | Time:22s
+Fold 9 Epoch 27 | Train Loss:0.0056 Acc:0.9981 | Val Loss:0.5647 Acc:0.8143 | Time:22s
+Fold 9 Epoch 28 | Train Loss:0.0032 Acc:1.0000 | Val Loss:0.3887 Acc:0.8286 | Time:22s
+Fold 9 Epoch 29 | Train Loss:0.0151 Acc:0.9961 | Val Loss:0.4356 Acc:0.8571 | Time:21s
+Fold 9 Epoch 30 | Train Loss:0.0226 Acc:0.9923 | Val Loss:0.5400 Acc:0.8286 | Time:22s
+Fold 9 Epoch 31 | Train Loss:0.0145 Acc:0.9971 | Val Loss:0.4299 Acc:0.8143 | Time:22s
+  ⏹ 早停于 Epoch 31（10 轮未提升）
+  ✅ Fold9 Best Val Acc: 0.8571
+
+============================================================
+  Fold 10/12: 10
+  验证受试者: 10 (80 张)
+  验证表情分布: {0: 10, 1: 10, 2: 20, 3: 20, 5: 20}
+  训练: 1026 张 | 验证: 80 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold10 Epoch  1 | Train Loss:0.6782 Acc:0.7515 | Val Loss:1.4431 Acc:0.5000 | Time:21s
+Fold10 Epoch  2 | Train Loss:0.2047 Acc:0.9357 | Val Loss:1.2785 Acc:0.4750 | Time:22s
+Fold10 Epoch  3 | Train Loss:0.1118 Acc:0.9717 | Val Loss:1.0286 Acc:0.5750 | Time:21s
+Fold10 Epoch  4 | Train Loss:0.1326 Acc:0.9571 | Val Loss:1.7475 Acc:0.5875 | Time:22s
+Fold10 Epoch  5 | Train Loss:0.1960 Acc:0.9454 | Val Loss:1.0022 Acc:0.6250 | Time:22s
+Fold10 Epoch  6 | Train Loss:0.1759 Acc:0.9503 | Val Loss:1.1155 Acc:0.5625 | Time:22s
+Fold10 Epoch  7 | Train Loss:0.1327 Acc:0.9649 | Val Loss:1.5148 Acc:0.4375 | Time:21s
+Fold10 Epoch  8 | Train Loss:0.1057 Acc:0.9698 | Val Loss:1.7829 Acc:0.6250 | Time:21s
+Fold10 Epoch  9 | Train Loss:0.1534 Acc:0.9688 | Val Loss:1.3678 Acc:0.5000 | Time:22s
+Fold10 Epoch 10 | Train Loss:0.0612 Acc:0.9854 | Val Loss:1.5741 Acc:0.3750 | Time:22s
+Fold10 Epoch 11 | Train Loss:0.0554 Acc:0.9883 | Val Loss:1.8110 Acc:0.5375 | Time:22s
+Fold10 Epoch 12 | Train Loss:0.0553 Acc:0.9844 | Val Loss:2.3403 Acc:0.3750 | Time:22s
+Fold10 Epoch 13 | Train Loss:0.1651 Acc:0.9834 | Val Loss:1.6978 Acc:0.4000 | Time:21s
+Fold10 Epoch 14 | Train Loss:0.1491 Acc:0.9532 | Val Loss:2.2577 Acc:0.4125 | Time:21s
+Fold10 Epoch 15 | Train Loss:0.1994 Acc:0.9717 | Val Loss:1.4720 Acc:0.6250 | Time:21s
+  ⏹ 早停于 Epoch 15（10 轮未提升）
+  ✅ Fold10 Best Val Acc: 0.6250
+
+============================================================
+  Fold 11/12: 11
+  验证受试者: 11 (100 张)
+  验证表情分布: {0: 20, 1: 20, 2: 20, 4: 20, 5: 20}
+  训练: 1006 张 | 验证: 100 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold11 Epoch  1 | Train Loss:0.7085 Acc:0.7565 | Val Loss:0.7564 Acc:0.8000 | Time:21s
+Fold11 Epoch  2 | Train Loss:0.2529 Acc:0.9364 | Val Loss:0.8928 Acc:0.8200 | Time:22s
+Fold11 Epoch  3 | Train Loss:0.1816 Acc:0.9433 | Val Loss:1.2725 Acc:0.5600 | Time:21s
+Fold11 Epoch  4 | Train Loss:0.1117 Acc:0.9602 | Val Loss:1.4217 Acc:0.5100 | Time:21s
+Fold11 Epoch  5 | Train Loss:0.0748 Acc:0.9811 | Val Loss:2.0785 Acc:0.3100 | Time:21s
+Fold11 Epoch  6 | Train Loss:0.0685 Acc:0.9751 | Val Loss:1.2318 Acc:0.4200 | Time:21s
+Fold11 Epoch  7 | Train Loss:0.0437 Acc:0.9911 | Val Loss:1.8159 Acc:0.3200 | Time:21s
+Fold11 Epoch  8 | Train Loss:0.0615 Acc:0.9811 | Val Loss:1.0580 Acc:0.5100 | Time:21s
+Fold11 Epoch  9 | Train Loss:0.0560 Acc:0.9861 | Val Loss:1.2608 Acc:0.4900 | Time:21s
+Fold11 Epoch 10 | Train Loss:0.0269 Acc:0.9940 | Val Loss:1.2597 Acc:0.3400 | Time:21s
+Fold11 Epoch 11 | Train Loss:0.0290 Acc:0.9920 | Val Loss:1.5832 Acc:0.3900 | Time:21s
+Fold11 Epoch 12 | Train Loss:0.0246 Acc:0.9930 | Val Loss:1.7453 Acc:0.4100 | Time:21s
+  ⏹ 早停于 Epoch 12（10 轮未提升）
+  ✅ Fold11 Best Val Acc: 0.8200
+
+============================================================
+  Fold 12/12: 12
+  验证受试者: 12 (70 张)
+  验证表情分布: {0: 20, 1: 10, 3: 20, 4: 20}
+  训练: 1036 张 | 验证: 70 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold12 Epoch  1 | Train Loss:0.7219 Acc:0.7239 | Val Loss:2.0532 Acc:0.1571 | Time:22s
+Fold12 Epoch  2 | Train Loss:0.1850 Acc:0.9459 | Val Loss:2.0593 Acc:0.3000 | Time:22s
+Fold12 Epoch  3 | Train Loss:0.1505 Acc:0.9566 | Val Loss:3.1381 Acc:0.4143 | Time:23s
+Fold12 Epoch  4 | Train Loss:0.0837 Acc:0.9836 | Val Loss:3.6723 Acc:0.2857 | Time:21s
+Fold12 Epoch  5 | Train Loss:0.1030 Acc:0.9681 | Val Loss:3.6974 Acc:0.1429 | Time:22s
+Fold12 Epoch  6 | Train Loss:0.1142 Acc:0.9653 | Val Loss:3.1326 Acc:0.2857 | Time:22s
+Fold12 Epoch  7 | Train Loss:0.0887 Acc:0.9662 | Val Loss:2.2885 Acc:0.2857 | Time:22s
+Fold12 Epoch  8 | Train Loss:0.0726 Acc:0.9836 | Val Loss:3.1650 Acc:0.2857 | Time:22s
+Fold12 Epoch  9 | Train Loss:0.0369 Acc:0.9913 | Val Loss:2.5611 Acc:0.3143 | Time:22s
+Fold12 Epoch 10 | Train Loss:0.0472 Acc:0.9855 | Val Loss:2.5469 Acc:0.2143 | Time:21s
+Fold12 Epoch 11 | Train Loss:0.0369 Acc:0.9884 | Val Loss:3.0567 Acc:0.2857 | Time:21s
+Fold12 Epoch 12 | Train Loss:0.0369 Acc:0.9923 | Val Loss:4.1245 Acc:0.2714 | Time:22s
+Fold12 Epoch 13 | Train Loss:0.0457 Acc:0.9865 | Val Loss:3.4430 Acc:0.3714 | Time:22s
+  ⏹ 早停于 Epoch 13（10 轮未提升）
+  ✅ Fold12 Best Val Acc: 0.4143
+
+============================================================
+  交叉验证结果汇总
+============================================================
+  1: 0.6825
+  2: 0.7000
+  3: 0.9111
+  4: 0.9167
+  5: 0.9000
+  6: 0.7083
+  7: 0.7800
+  8: 0.9364
+  9: 0.8571
+  10: 0.6250
+  11: 0.8200
+  12: 0.4143
+
+  平均精度: 0.7710 +- 0.1472
+
+  每位受试者准确率:
+    subject_1: 0.6825 [####################----------]
+    subject_2: 0.7000 [#####################---------]
+    subject_3: 0.9111 [###########################---]
+    subject_4: 0.9167 [###########################---]
+    subject_5: 0.9000 [###########################---]
+    subject_6: 0.7083 [#####################---------]
+    subject_7: 0.7800 [#######################-------]
+    subject_8: 0.9364 [############################--]
+    subject_9: 0.8571 [#########################-----]
+    subject_10: 0.6250 [##################------------]
+    subject_11: 0.8200 [########################------]
+    subject_12: 0.4143 [############------------------]
+  最低: subject_12 = 0.4143
+  最高: subject_8 = 0.9364
+
+📝 训练指标已保存: ../../KMU-FED/output_exp2_d4\training_metrics.json
+
+⏱️  总耗时: 69.5 分钟
