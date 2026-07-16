@@ -137,8 +137,14 @@ class KMU_FED(Dataset):
         self._precompute_faces()
 
     def _detect_face(self, src):
-        """多级回退: Haar Cascade → YOLO → None(整图)"""
+        """多级回退: YOLO → Haar Cascade → None(整图)"""
         h_img, w_img = src.shape[:2]
+        # YOLO 优先（更准确的人脸检测 + 保留上下文）
+        if hasattr(self, '_yolo_detector') and self._yolo_detector is not None:
+            results = self._yolo_detector(src, conf=0.4, verbose=False)
+            if len(results) > 0 and len(results[0].boxes) > 0:
+                return tuple(map(int, results[0].boxes[0].xyxy[0]))
+        # Haar Cascade 回退（仅当 YOLO 不可用时）
         if self.face_detector is not None and hasattr(self.face_detector, 'detectMultiScale'):
             scale = 640.0 / max(h_img, w_img)
             small = cv2.resize(src, (int(w_img*scale), int(h_img*scale)))
@@ -150,10 +156,6 @@ class KMU_FED(Dataset):
                 pad_w, pad_h = int(w*0.2), int(h*0.2)
                 return (max(0, x-pad_w), max(0, y-pad_h),
                         min(w_img, x+w+pad_w), min(h_img, y+h+pad_h))
-        if hasattr(self, '_yolo_detector') and self._yolo_detector is not None:
-            results = self._yolo_detector(src, conf=0.4, verbose=False)
-            if len(results) > 0 and len(results[0].boxes) > 0:
-                return tuple(map(int, results[0].boxes[0].xyxy[0]))
         return None
 
     def _precompute_faces(self):
@@ -385,31 +387,34 @@ def run_cross_validation(args, writer):
     except Exception as e:
         print(f"YOLO 加载失败 ({e})")
 
-    # 尝试加载 Haar Cascade（比 YOLO 更精确的人脸检测）
-    import os as _os
-    cascade_paths = [
-        _os.path.join(_os.path.dirname(__file__), "..", "..", "haarcascade_frontalface_default.xml"),
-        "haarcascade_frontalface_default.xml",
-        cv2.data.haarcascades + "haarcascade_frontalface_default.xml" if hasattr(cv2, 'data') else None,
-    ]
-    for cp in cascade_paths:
-        if cp and _os.path.exists(cp):
-            try:
-                face_cascade = cv2.CascadeClassifier(cp)
-                if not face_cascade.empty():
-                    print(f"人脸检测: Haar Cascade 已加载")
-                    break
-            except Exception:
-                continue
-
-    if face_cascade is None and yolo_detector is None:
-        print("人脸检测: 不可用，将使用整张图片")
-    elif face_cascade is None:
-        print("人脸检测: Haar 不可用，使用 YOLO (person-level)")
+    # 人脸检测策略: YOLO 优先（如果指定了 --yolo），否则尝试 Haar Cascade
+    if yolo_detector is not None:
+        # YOLO 模式: 不加载 Haar，YOLO 作为主检测器
+        face_cascade = None
+        print("人脸检测: YOLO-only 模式 (不加载 Haar)")
+    else:
+        # 非 YOLO 模式: 尝试 Haar Cascade
+        import os as _os
+        cascade_paths = [
+            _os.path.join(_os.path.dirname(__file__), "..", "..", "haarcascade_frontalface_default.xml"),
+            "haarcascade_frontalface_default.xml",
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml" if hasattr(cv2, 'data') else None,
+        ]
+        for cp in cascade_paths:
+            if cp and _os.path.exists(cp):
+                try:
+                    face_cascade = cv2.CascadeClassifier(cp)
+                    if not face_cascade.empty():
+                        print(f"人脸检测: Haar Cascade 已加载")
+                        break
+                except Exception:
+                    continue
+        if face_cascade is None:
+            print("人脸检测: 不可用，将使用整张图片")
 
     # 构建数据集
     dataset = KMU_FED(args.data_dir, transform=val_transform, face_detector=face_cascade)
-    dataset._yolo_detector = yolo_detector  # YOLO 作为回退
+    dataset._yolo_detector = yolo_detector  # YOLO 作为主检测器 (优先级高于 Haar)
     unique_subjects = np.array(sorted(set(dataset.subject_ids), key=int))
 
     # ---- 数据分布报告 ----
@@ -473,7 +478,8 @@ def run_cross_validation(args, writer):
         print(f"  训练: {len(tr_indices)} 张 | 验证: {len(va_indices)} 张")
         print(f"{'='*60}")
 
-        train_dataset = KMU_FED(args.data_dir, transform=train_transform, face_detector=face_cascade)  # 进行了数据增强 即随机水平翻转以及随机裁剪
+        train_dataset = KMU_FED(args.data_dir, transform=train_transform, face_detector=face_cascade)
+        train_dataset._yolo_detector = yolo_detector  # YOLO 作为主检测器
         val_dataset = dataset
 
         # subset 随机从数据中选取子集
