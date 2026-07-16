@@ -1,0 +1,323 @@
+============================================================
+  验证实验: 官方原版架构 + KMU-FED + KFold+YOLO
+  CLIP-12 + ResNet-18 (MSCeleb) + Sigmoid Gate + Supervisor
+============================================================
+  数据: ../KMU-FED/KMU-FED
+  YOLO: ../yolov8n.pt
+  协议: KFold 10折
+  超参: lr=0.0002, bs=32, epochs=60
+============================================================
+
+✅ CLIP 加载成功: ../CAFE/CAFE/clip/ViT-B-32.pt
+✅ YOLO 加载成功: ../yolov8n.pt
+
+📊 数据集分析
+   受试者: 12, 图片: 1106
+   类别: 6
+
+
+──────────────────────────────────────────────────
+  Fold 1/10
+  训练: 926 张 | 验证: 180 张 (受试者 ['10', '11'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5326 Acc:0.2592 | Val Loss:1.7543 Acc:0.3222 | Time:17s
+  Epoch  2 | Train Loss:9.2714 Acc:0.4363 | Val Loss:1.6992 Acc:0.4944 | Time:18s
+  Epoch  3 | Train Loss:9.1251 Acc:0.6609 | Val Loss:1.6444 Acc:0.5444 | Time:18s
+  Epoch  4 | Train Loss:9.0004 Acc:0.6933 | Val Loss:1.6025 Acc:0.5278 | Time:18s
+  Epoch  5 | Train Loss:8.9036 Acc:0.7711 | Val Loss:1.5677 Acc:0.5722 | Time:17s
+  Epoch  6 | Train Loss:8.8362 Acc:0.7948 | Val Loss:1.5401 Acc:0.5778 | Time:18s
+  Epoch  7 | Train Loss:8.7736 Acc:0.8175 | Val Loss:1.5141 Acc:0.5833 | Time:18s
+  Epoch  8 | Train Loss:8.7432 Acc:0.8315 | Val Loss:1.4959 Acc:0.5667 | Time:18s
+  Epoch  9 | Train Loss:8.6880 Acc:0.8283 | Val Loss:1.4899 Acc:0.5556 | Time:18s
+  Epoch 10 | Train Loss:8.6434 Acc:0.8607 | Val Loss:1.4706 Acc:0.5833 | Time:18s
+  Epoch 11 | Train Loss:8.6148 Acc:0.8639 | Val Loss:1.4586 Acc:0.6000 | Time:18s
+  Epoch 12 | Train Loss:8.6046 Acc:0.8596 | Val Loss:1.4483 Acc:0.5778 | Time:18s
+  Epoch 13 | Train Loss:8.5483 Acc:0.8780 | Val Loss:1.4400 Acc:0.5778 | Time:18s
+  Epoch 14 | Train Loss:8.5410 Acc:0.8877 | Val Loss:1.4311 Acc:0.5778 | Time:19s
+  Epoch 15 | Train Loss:8.5158 Acc:0.9028 | Val Loss:1.4214 Acc:0.5833 | Time:19s
+  Epoch 16 | Train Loss:8.4964 Acc:0.8877 | Val Loss:1.4145 Acc:0.5889 | Time:25s
+  Epoch 17 | Train Loss:8.4826 Acc:0.8909 | Val Loss:1.4114 Acc:0.5778 | Time:20s
+  Epoch 18 | Train Loss:8.4883 Acc:0.9114 | Val Loss:1.4042 Acc:0.5833 | Time:21s
+  Epoch 19 | Train Loss:8.4469 Acc:0.9136 | Val Loss:1.3985 Acc:0.5833 | Time:19s
+  Epoch 20 | Train Loss:8.4545 Acc:0.9050 | Val Loss:1.3960 Acc:0.5833 | Time:19s
+  Epoch 21 | Train Loss:8.4376 Acc:0.9071 | Val Loss:1.3926 Acc:0.5833 | Time:19s
+  ⏹ 早停于 Epoch 21
+  ✅ Fold 1 Best: 0.6000
+
+──────────────────────────────────────────────────
+  Fold 2/10
+  训练: 910 张 | 验证: 196 张 (受试者 ['1', '9'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.6217 Acc:0.2549 | Val Loss:1.7118 Acc:0.5765 | Time:18s
+  Epoch  2 | Train Loss:9.3271 Acc:0.4813 | Val Loss:1.6413 Acc:0.6837 | Time:18s
+  Epoch  3 | Train Loss:9.1702 Acc:0.6484 | Val Loss:1.5779 Acc:0.7194 | Time:18s
+  Epoch  4 | Train Loss:9.0675 Acc:0.7264 | Val Loss:1.5419 Acc:0.7143 | Time:18s
+  Epoch  5 | Train Loss:8.9548 Acc:0.8066 | Val Loss:1.5127 Acc:0.7602 | Time:18s
+  Epoch  6 | Train Loss:8.8776 Acc:0.8231 | Val Loss:1.4894 Acc:0.7245 | Time:18s
+  Epoch  7 | Train Loss:8.8579 Acc:0.8473 | Val Loss:1.4672 Acc:0.7296 | Time:18s
+  Epoch  8 | Train Loss:8.7940 Acc:0.8418 | Val Loss:1.4457 Acc:0.7296 | Time:18s
+  Epoch  9 | Train Loss:8.7547 Acc:0.8692 | Val Loss:1.4251 Acc:0.7245 | Time:18s
+  Epoch 10 | Train Loss:8.7328 Acc:0.8890 | Val Loss:1.4166 Acc:0.7347 | Time:18s
+  Epoch 11 | Train Loss:8.7060 Acc:0.9044 | Val Loss:1.4020 Acc:0.7500 | Time:18s
+  Epoch 12 | Train Loss:8.6525 Acc:0.9165 | Val Loss:1.3909 Acc:0.7500 | Time:18s
+  Epoch 13 | Train Loss:8.5983 Acc:0.9154 | Val Loss:1.3885 Acc:0.7398 | Time:18s
+  Epoch 14 | Train Loss:8.5944 Acc:0.9264 | Val Loss:1.3726 Acc:0.7500 | Time:18s
+  Epoch 15 | Train Loss:8.5932 Acc:0.9264 | Val Loss:1.3696 Acc:0.7500 | Time:18s
+  ⏹ 早停于 Epoch 15
+  ✅ Fold 2 Best: 0.7602
+
+──────────────────────────────────────────────────
+  Fold 3/10
+  训练: 986 张 | 验证: 120 张 (受试者 ['6'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5437 Acc:0.2323 | Val Loss:1.7687 Acc:0.2000 | Time:19s
+  Epoch  2 | Train Loss:9.2717 Acc:0.5183 | Val Loss:1.7076 Acc:0.3917 | Time:20s
+  Epoch  3 | Train Loss:9.0789 Acc:0.7343 | Val Loss:1.6518 Acc:0.5083 | Time:19s
+  Epoch  4 | Train Loss:8.9546 Acc:0.7941 | Val Loss:1.6000 Acc:0.6417 | Time:20s
+  Epoch  5 | Train Loss:8.9112 Acc:0.8256 | Val Loss:1.5716 Acc:0.6500 | Time:19s
+  Epoch  6 | Train Loss:8.8289 Acc:0.8347 | Val Loss:1.5420 Acc:0.6500 | Time:19s
+  Epoch  7 | Train Loss:8.7765 Acc:0.8611 | Val Loss:1.5150 Acc:0.6583 | Time:19s
+  Epoch  8 | Train Loss:8.6950 Acc:0.8651 | Val Loss:1.4981 Acc:0.6500 | Time:19s
+  Epoch  9 | Train Loss:8.6485 Acc:0.8874 | Val Loss:1.4798 Acc:0.6333 | Time:19s
+  Epoch 10 | Train Loss:8.6352 Acc:0.8925 | Val Loss:1.4714 Acc:0.6583 | Time:19s
+  Epoch 11 | Train Loss:8.5942 Acc:0.9138 | Val Loss:1.4525 Acc:0.6417 | Time:19s
+  Epoch 12 | Train Loss:8.5507 Acc:0.9067 | Val Loss:1.4459 Acc:0.6583 | Time:19s
+  Epoch 13 | Train Loss:8.5438 Acc:0.9097 | Val Loss:1.4339 Acc:0.6667 | Time:19s
+  Epoch 14 | Train Loss:8.5113 Acc:0.9209 | Val Loss:1.4313 Acc:0.6583 | Time:19s
+  Epoch 15 | Train Loss:8.4920 Acc:0.9260 | Val Loss:1.4133 Acc:0.6667 | Time:19s
+  Epoch 16 | Train Loss:8.4664 Acc:0.9219 | Val Loss:1.4067 Acc:0.6667 | Time:19s
+  Epoch 17 | Train Loss:8.4551 Acc:0.9229 | Val Loss:1.4024 Acc:0.6667 | Time:19s
+  Epoch 18 | Train Loss:8.4720 Acc:0.9280 | Val Loss:1.3994 Acc:0.6667 | Time:19s
+  Epoch 19 | Train Loss:8.4327 Acc:0.9331 | Val Loss:1.3922 Acc:0.6667 | Time:19s
+  Epoch 20 | Train Loss:8.4238 Acc:0.9351 | Val Loss:1.3872 Acc:0.6667 | Time:19s
+  Epoch 21 | Train Loss:8.4166 Acc:0.9341 | Val Loss:1.3878 Acc:0.6583 | Time:19s
+  Epoch 22 | Train Loss:8.3928 Acc:0.9402 | Val Loss:1.3868 Acc:0.6667 | Time:19s
+  Epoch 23 | Train Loss:8.3847 Acc:0.9331 | Val Loss:1.3817 Acc:0.6667 | Time:19s
+  ⏹ 早停于 Epoch 23
+  ✅ Fold 3 Best: 0.6667
+
+──────────────────────────────────────────────────
+  Fold 4/10
+  训练: 1016 张 | 验证: 90 张 (受试者 ['3'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.6175 Acc:0.1959 | Val Loss:1.7637 Acc:0.3000 | Time:20s
+  Epoch  2 | Train Loss:9.3146 Acc:0.4409 | Val Loss:1.6611 Acc:0.5333 | Time:21s
+  Epoch  3 | Train Loss:9.1165 Acc:0.6713 | Val Loss:1.5767 Acc:0.6556 | Time:20s
+  Epoch  4 | Train Loss:9.0328 Acc:0.7441 | Val Loss:1.5089 Acc:0.6667 | Time:20s
+  Epoch  5 | Train Loss:8.9444 Acc:0.7953 | Val Loss:1.4628 Acc:0.6667 | Time:20s
+  Epoch  6 | Train Loss:8.8544 Acc:0.8632 | Val Loss:1.4297 Acc:0.6667 | Time:20s
+  Epoch  7 | Train Loss:8.7803 Acc:0.8888 | Val Loss:1.4077 Acc:0.6778 | Time:20s
+  Epoch  8 | Train Loss:8.7263 Acc:0.8858 | Val Loss:1.3819 Acc:0.7222 | Time:20s
+  Epoch  9 | Train Loss:8.6892 Acc:0.9193 | Val Loss:1.3583 Acc:0.7111 | Time:20s
+  Epoch 10 | Train Loss:8.6574 Acc:0.9252 | Val Loss:1.3508 Acc:0.7222 | Time:20s
+  Epoch 11 | Train Loss:8.6343 Acc:0.9321 | Val Loss:1.3258 Acc:0.7222 | Time:20s
+  Epoch 12 | Train Loss:8.6187 Acc:0.9301 | Val Loss:1.3115 Acc:0.7222 | Time:20s
+  Epoch 13 | Train Loss:8.5804 Acc:0.9311 | Val Loss:1.2999 Acc:0.7333 | Time:20s
+  Epoch 14 | Train Loss:8.5478 Acc:0.9547 | Val Loss:1.2859 Acc:0.7222 | Time:20s
+  Epoch 15 | Train Loss:8.5077 Acc:0.9537 | Val Loss:1.2802 Acc:0.7333 | Time:21s
+  Epoch 16 | Train Loss:8.5114 Acc:0.9528 | Val Loss:1.2677 Acc:0.7333 | Time:20s
+  Epoch 17 | Train Loss:8.4923 Acc:0.9557 | Val Loss:1.2588 Acc:0.7444 | Time:20s
+  Epoch 18 | Train Loss:8.4765 Acc:0.9606 | Val Loss:1.2563 Acc:0.7333 | Time:20s
+  Epoch 19 | Train Loss:8.4635 Acc:0.9596 | Val Loss:1.2478 Acc:0.7444 | Time:20s
+  Epoch 20 | Train Loss:8.4530 Acc:0.9734 | Val Loss:1.2422 Acc:0.7333 | Time:20s
+  Epoch 21 | Train Loss:8.4515 Acc:0.9675 | Val Loss:1.2358 Acc:0.7444 | Time:20s
+  Epoch 22 | Train Loss:8.4191 Acc:0.9685 | Val Loss:1.2305 Acc:0.7556 | Time:20s
+  Epoch 23 | Train Loss:8.4164 Acc:0.9734 | Val Loss:1.2287 Acc:0.7444 | Time:20s
+  Epoch 24 | Train Loss:8.4306 Acc:0.9715 | Val Loss:1.2227 Acc:0.7556 | Time:20s
+  Epoch 25 | Train Loss:8.4141 Acc:0.9734 | Val Loss:1.2221 Acc:0.7444 | Time:20s
+  Epoch 26 | Train Loss:8.4138 Acc:0.9793 | Val Loss:1.2162 Acc:0.7556 | Time:20s
+  Epoch 27 | Train Loss:8.3973 Acc:0.9636 | Val Loss:1.2165 Acc:0.7556 | Time:20s
+  Epoch 28 | Train Loss:8.4023 Acc:0.9764 | Val Loss:1.2150 Acc:0.7444 | Time:20s
+  Epoch 29 | Train Loss:8.4031 Acc:0.9724 | Val Loss:1.2102 Acc:0.7556 | Time:20s
+  Epoch 30 | Train Loss:8.3819 Acc:0.9724 | Val Loss:1.2108 Acc:0.7556 | Time:20s
+  Epoch 31 | Train Loss:8.3715 Acc:0.9823 | Val Loss:1.2079 Acc:0.7556 | Time:20s
+  Epoch 32 | Train Loss:8.3639 Acc:0.9803 | Val Loss:1.2097 Acc:0.7556 | Time:20s
+  ⏹ 早停于 Epoch 32
+  ✅ Fold 4 Best: 0.7556
+
+──────────────────────────────────────────────────
+  Fold 5/10
+  训练: 1046 张 | 验证: 60 张 (受试者 ['2'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5626 Acc:0.1922 | Val Loss:1.6983 Acc:0.3667 | Time:20s
+  Epoch  2 | Train Loss:9.2805 Acc:0.4971 | Val Loss:1.6327 Acc:0.5000 | Time:21s
+  Epoch  3 | Train Loss:9.1299 Acc:0.6816 | Val Loss:1.5830 Acc:0.5000 | Time:21s
+  Epoch  4 | Train Loss:8.9864 Acc:0.7572 | Val Loss:1.5537 Acc:0.5000 | Time:20s
+  Epoch  5 | Train Loss:8.9033 Acc:0.7772 | Val Loss:1.5144 Acc:0.5000 | Time:20s
+  Epoch  6 | Train Loss:8.8205 Acc:0.7954 | Val Loss:1.4876 Acc:0.5000 | Time:20s
+  Epoch  7 | Train Loss:8.7661 Acc:0.8403 | Val Loss:1.4698 Acc:0.5000 | Time:20s
+  Epoch  8 | Train Loss:8.7140 Acc:0.8509 | Val Loss:1.4565 Acc:0.5000 | Time:20s
+  Epoch  9 | Train Loss:8.6492 Acc:0.8585 | Val Loss:1.4442 Acc:0.5000 | Time:20s
+  Epoch 10 | Train Loss:8.6199 Acc:0.8843 | Val Loss:1.4126 Acc:0.5000 | Time:20s
+  Epoch 11 | Train Loss:8.5983 Acc:0.8834 | Val Loss:1.4029 Acc:0.5000 | Time:20s
+  Epoch 12 | Train Loss:8.5485 Acc:0.8881 | Val Loss:1.3986 Acc:0.5000 | Time:20s
+  ⏹ 早停于 Epoch 12
+  ✅ Fold 5 Best: 0.5000
+
+──────────────────────────────────────────────────
+  Fold 6/10
+  训练: 1036 张 | 验证: 70 张 (受试者 ['12'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5841 Acc:0.1959 | Val Loss:1.7581 Acc:0.5143 | Time:20s
+  Epoch  2 | Train Loss:9.2774 Acc:0.4990 | Val Loss:1.7716 Acc:0.3143 | Time:21s
+  Epoch  3 | Train Loss:9.1238 Acc:0.6670 | Val Loss:1.7513 Acc:0.2857 | Time:21s
+  Epoch  4 | Train Loss:9.0339 Acc:0.7201 | Val Loss:1.7504 Acc:0.2857 | Time:20s
+  Epoch  5 | Train Loss:8.9160 Acc:0.7857 | Val Loss:1.7443 Acc:0.2857 | Time:20s
+  Epoch  6 | Train Loss:8.8540 Acc:0.8079 | Val Loss:1.7367 Acc:0.2857 | Time:20s
+  Epoch  7 | Train Loss:8.7768 Acc:0.8475 | Val Loss:1.7236 Acc:0.2857 | Time:20s
+  Epoch  8 | Train Loss:8.7177 Acc:0.8533 | Val Loss:1.7232 Acc:0.3286 | Time:20s
+  Epoch  9 | Train Loss:8.7097 Acc:0.8658 | Val Loss:1.6990 Acc:0.2857 | Time:20s
+  Epoch 10 | Train Loss:8.6413 Acc:0.8822 | Val Loss:1.7111 Acc:0.3000 | Time:20s
+  Epoch 11 | Train Loss:8.5949 Acc:0.8938 | Val Loss:1.7031 Acc:0.3000 | Time:20s
+  ⏹ 早停于 Epoch 11
+  ✅ Fold 6 Best: 0.5143
+
+──────────────────────────────────────────────────
+  Fold 7/10
+  训练: 986 张 | 验证: 120 张 (受试者 ['5'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5672 Acc:0.2292 | Val Loss:1.7414 Acc:0.3333 | Time:19s
+  Epoch  2 | Train Loss:9.2949 Acc:0.5284 | Val Loss:1.6531 Acc:0.6083 | Time:20s
+  Epoch  3 | Train Loss:9.1124 Acc:0.6866 | Val Loss:1.5878 Acc:0.6917 | Time:20s
+  Epoch  4 | Train Loss:9.0174 Acc:0.7404 | Val Loss:1.5301 Acc:0.7667 | Time:19s
+  Epoch  5 | Train Loss:8.9186 Acc:0.8093 | Val Loss:1.4939 Acc:0.7333 | Time:19s
+  Epoch  6 | Train Loss:8.8342 Acc:0.8245 | Val Loss:1.4663 Acc:0.7917 | Time:19s
+  Epoch  7 | Train Loss:8.7483 Acc:0.8509 | Val Loss:1.4313 Acc:0.7750 | Time:19s
+  Epoch  8 | Train Loss:8.7655 Acc:0.8692 | Val Loss:1.4096 Acc:0.7583 | Time:19s
+  Epoch  9 | Train Loss:8.6879 Acc:0.8803 | Val Loss:1.3906 Acc:0.7583 | Time:19s
+  Epoch 10 | Train Loss:8.6524 Acc:0.8854 | Val Loss:1.3732 Acc:0.7750 | Time:19s
+  Epoch 11 | Train Loss:8.6227 Acc:0.8945 | Val Loss:1.3613 Acc:0.7500 | Time:19s
+  Epoch 12 | Train Loss:8.5709 Acc:0.9016 | Val Loss:1.3450 Acc:0.7750 | Time:19s
+  Epoch 13 | Train Loss:8.5353 Acc:0.9026 | Val Loss:1.3296 Acc:0.7583 | Time:19s
+  Epoch 14 | Train Loss:8.5169 Acc:0.9138 | Val Loss:1.3181 Acc:0.7833 | Time:19s
+  Epoch 15 | Train Loss:8.5209 Acc:0.9108 | Val Loss:1.3111 Acc:0.7750 | Time:19s
+  Epoch 16 | Train Loss:8.4895 Acc:0.9158 | Val Loss:1.3046 Acc:0.7750 | Time:19s
+  ⏹ 早停于 Epoch 16
+  ✅ Fold 7 Best: 0.7917
+
+──────────────────────────────────────────────────
+  Fold 8/10
+  训练: 996 张 | 验证: 110 张 (受试者 ['8'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5911 Acc:0.2661 | Val Loss:1.7353 Acc:0.4818 | Time:19s
+  Epoch  2 | Train Loss:9.3133 Acc:0.5693 | Val Loss:1.6603 Acc:0.5091 | Time:20s
+  Epoch  3 | Train Loss:9.1094 Acc:0.7239 | Val Loss:1.5843 Acc:0.6636 | Time:20s
+  Epoch  4 | Train Loss:9.0103 Acc:0.7691 | Val Loss:1.5438 Acc:0.5727 | Time:20s
+  Epoch  5 | Train Loss:8.9217 Acc:0.7912 | Val Loss:1.5012 Acc:0.6636 | Time:19s
+  Epoch  6 | Train Loss:8.8241 Acc:0.8323 | Val Loss:1.4617 Acc:0.7182 | Time:19s
+  Epoch  7 | Train Loss:8.7973 Acc:0.8444 | Val Loss:1.4347 Acc:0.7455 | Time:19s
+  Epoch  8 | Train Loss:8.7364 Acc:0.8695 | Val Loss:1.4173 Acc:0.7636 | Time:19s
+  Epoch  9 | Train Loss:8.7041 Acc:0.8665 | Val Loss:1.4109 Acc:0.7545 | Time:19s
+  Epoch 10 | Train Loss:8.6488 Acc:0.8855 | Val Loss:1.3809 Acc:0.7364 | Time:19s
+  Epoch 11 | Train Loss:8.6038 Acc:0.8946 | Val Loss:1.3634 Acc:0.7545 | Time:19s
+  Epoch 12 | Train Loss:8.6102 Acc:0.8916 | Val Loss:1.3436 Acc:0.7636 | Time:19s
+  Epoch 13 | Train Loss:8.5733 Acc:0.9056 | Val Loss:1.3410 Acc:0.7182 | Time:19s
+  Epoch 14 | Train Loss:8.5456 Acc:0.9006 | Val Loss:1.3147 Acc:0.7636 | Time:19s
+  Epoch 15 | Train Loss:8.5223 Acc:0.9046 | Val Loss:1.3177 Acc:0.7364 | Time:19s
+  Epoch 16 | Train Loss:8.5442 Acc:0.9066 | Val Loss:1.3113 Acc:0.7364 | Time:19s
+  Epoch 17 | Train Loss:8.4769 Acc:0.9147 | Val Loss:1.3036 Acc:0.7364 | Time:19s
+  Epoch 18 | Train Loss:8.4765 Acc:0.9187 | Val Loss:1.3034 Acc:0.7636 | Time:19s
+  ⏹ 早停于 Epoch 18
+  ✅ Fold 8 Best: 0.7636
+
+──────────────────────────────────────────────────
+  Fold 9/10
+  训练: 1046 张 | 验证: 60 张 (受试者 ['4'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5599 Acc:0.2610 | Val Loss:1.6747 Acc:0.5833 | Time:20s
+  Epoch  2 | Train Loss:9.3017 Acc:0.5354 | Val Loss:1.6284 Acc:0.5667 | Time:21s
+  Epoch  3 | Train Loss:9.1328 Acc:0.7361 | Val Loss:1.5763 Acc:0.5167 | Time:21s
+  Epoch  4 | Train Loss:9.0212 Acc:0.7715 | Val Loss:1.5319 Acc:0.5333 | Time:20s
+  Epoch  5 | Train Loss:8.9033 Acc:0.8164 | Val Loss:1.4834 Acc:0.7667 | Time:20s
+  Epoch  6 | Train Loss:8.8204 Acc:0.8356 | Val Loss:1.4547 Acc:0.6833 | Time:20s
+  Epoch  7 | Train Loss:8.7575 Acc:0.8537 | Val Loss:1.4180 Acc:0.7000 | Time:20s
+  Epoch  8 | Train Loss:8.7203 Acc:0.8556 | Val Loss:1.3905 Acc:0.7667 | Time:20s
+  Epoch  9 | Train Loss:8.6515 Acc:0.8767 | Val Loss:1.3775 Acc:0.8667 | Time:20s
+  Epoch 10 | Train Loss:8.6162 Acc:0.8748 | Val Loss:1.3498 Acc:0.7667 | Time:20s
+  Epoch 11 | Train Loss:8.5768 Acc:0.8910 | Val Loss:1.3380 Acc:0.7667 | Time:20s
+  Epoch 12 | Train Loss:8.5423 Acc:0.8987 | Val Loss:1.3239 Acc:0.8167 | Time:20s
+  Epoch 13 | Train Loss:8.5133 Acc:0.9082 | Val Loss:1.3244 Acc:0.8167 | Time:20s
+  Epoch 14 | Train Loss:8.4806 Acc:0.9140 | Val Loss:1.2927 Acc:0.8667 | Time:20s
+  Epoch 15 | Train Loss:8.4953 Acc:0.9197 | Val Loss:1.2906 Acc:0.9000 | Time:20s
+  Epoch 16 | Train Loss:8.5008 Acc:0.9149 | Val Loss:1.2775 Acc:0.9000 | Time:20s
+  Epoch 17 | Train Loss:8.4267 Acc:0.9245 | Val Loss:1.2836 Acc:0.9333 | Time:20s
+  Epoch 18 | Train Loss:8.4022 Acc:0.9293 | Val Loss:1.2848 Acc:0.8500 | Time:20s
+  Epoch 19 | Train Loss:8.4148 Acc:0.9359 | Val Loss:1.2705 Acc:0.9000 | Time:21s
+  Epoch 20 | Train Loss:8.4214 Acc:0.9426 | Val Loss:1.2612 Acc:0.8833 | Time:20s
+  Epoch 21 | Train Loss:8.4054 Acc:0.9321 | Val Loss:1.2652 Acc:0.8833 | Time:20s
+  Epoch 22 | Train Loss:8.3707 Acc:0.9446 | Val Loss:1.2563 Acc:0.9167 | Time:20s
+  Epoch 23 | Train Loss:8.3787 Acc:0.9503 | Val Loss:1.2500 Acc:0.9000 | Time:20s
+  Epoch 24 | Train Loss:8.3900 Acc:0.9407 | Val Loss:1.2421 Acc:0.9000 | Time:20s
+  Epoch 25 | Train Loss:8.3649 Acc:0.9465 | Val Loss:1.2465 Acc:0.9000 | Time:20s
+  Epoch 26 | Train Loss:8.3274 Acc:0.9465 | Val Loss:1.2425 Acc:0.9000 | Time:21s
+  Epoch 27 | Train Loss:8.3705 Acc:0.9436 | Val Loss:1.2401 Acc:0.9000 | Time:20s
+  ⏹ 早停于 Epoch 27
+  ✅ Fold 9 Best: 0.9333
+
+──────────────────────────────────────────────────
+  Fold 10/10
+  训练: 1006 张 | 验证: 100 张 (受试者 ['7'])
+──────────────────────────────────────────────────
+weight : torch.Size([6, 512])
+bias : torch.Size([6])
+  Epoch  1 | Train Loss:9.5864 Acc:0.2366 | Val Loss:1.7419 Acc:0.3000 | Time:20s
+  Epoch  2 | Train Loss:9.2839 Acc:0.5050 | Val Loss:1.6283 Acc:0.5200 | Time:20s
+  Epoch  3 | Train Loss:9.1358 Acc:0.6730 | Val Loss:1.5674 Acc:0.6000 | Time:20s
+  Epoch  4 | Train Loss:9.0387 Acc:0.7734 | Val Loss:1.5083 Acc:0.7400 | Time:20s
+  Epoch  5 | Train Loss:8.9086 Acc:0.8161 | Val Loss:1.4753 Acc:0.8800 | Time:20s
+  Epoch  6 | Train Loss:8.8319 Acc:0.8519 | Val Loss:1.4427 Acc:0.9200 | Time:20s
+  Epoch  7 | Train Loss:8.7814 Acc:0.8797 | Val Loss:1.4154 Acc:0.9900 | Time:20s
+  Epoch  8 | Train Loss:8.7506 Acc:0.8887 | Val Loss:1.3988 Acc:0.9800 | Time:20s
+  Epoch  9 | Train Loss:8.6891 Acc:0.8966 | Val Loss:1.3796 Acc:0.9700 | Time:20s
+  Epoch 10 | Train Loss:8.6489 Acc:0.9105 | Val Loss:1.3653 Acc:1.0000 | Time:20s
+  Epoch 11 | Train Loss:8.6027 Acc:0.9165 | Val Loss:1.3496 Acc:1.0000 | Time:20s
+  Epoch 12 | Train Loss:8.5936 Acc:0.9254 | Val Loss:1.3304 Acc:1.0000 | Time:20s
+  Epoch 13 | Train Loss:8.5515 Acc:0.9245 | Val Loss:1.3348 Acc:1.0000 | Time:20s
+  Epoch 14 | Train Loss:8.5492 Acc:0.9304 | Val Loss:1.3159 Acc:1.0000 | Time:20s
+  Epoch 15 | Train Loss:8.5002 Acc:0.9483 | Val Loss:1.3158 Acc:1.0000 | Time:20s
+  Epoch 16 | Train Loss:8.4920 Acc:0.9513 | Val Loss:1.3031 Acc:1.0000 | Time:20s
+  Epoch 17 | Train Loss:8.4609 Acc:0.9453 | Val Loss:1.2930 Acc:1.0000 | Time:20s
+  Epoch 18 | Train Loss:8.4846 Acc:0.9553 | Val Loss:1.2855 Acc:1.0000 | Time:20s
+  Epoch 19 | Train Loss:8.4494 Acc:0.9453 | Val Loss:1.2749 Acc:1.0000 | Time:20s
+  Epoch 20 | Train Loss:8.4600 Acc:0.9493 | Val Loss:1.2738 Acc:1.0000 | Time:20s
+  ⏹ 早停于 Epoch 20
+  ✅ Fold 10 Best: 1.0000
+
+============================================================
+  验证实验汇总
+============================================================
+  Fold 1: 0.6000
+  Fold 2: 0.7602
+  Fold 3: 0.6667
+  Fold 4: 0.7556
+  Fold 5: 0.5000
+  Fold 6: 0.5143
+  Fold 7: 0.7917
+  Fold 8: 0.7636
+  Fold 9: 0.9333
+  Fold 10: 1.0000
+
+  平均: 0.7285 ± 0.1553
+  官方 CLIP-12 基线 (本地代码): 60.91% ± 15.67%
+  差值: 11.94 pp
+============================================================
+
+📝 结果已保存: ../KMU-FED/output_verify_official\training_metrics.json

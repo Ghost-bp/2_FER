@@ -1,0 +1,100 @@
+🖥️  设备: cuda:0
+✅ CLIP 模型加载成功: D:\MM_Emotion\2_FER\CAFE\CAFE\clip\ViT-B-32.pt
+🔧 配置: Backbone=resnet50 | 预训练=imagenet | CLIP=无 CLIP | Dropout=0.0
+🔧 优化器: adam | 调度器: cosine | LR=0.0002 | WD=0.0001 | LabelSmooth=0.0
+📈 TensorBoard 日志: ../../KMU-FED/output_exp2_e1\tensorboard\20260716_161634
+训练增强: RandomHorizontalFlip + RandomErasing + ColorJitter
+人脸检测: YOLO 已加载 (../../yolov8n.pt)
+人脸检测: Haar Cascade 已加载
+
+============================================================
+  数据集分析
+============================================================
+  数据集: D:\MM_Emotion\2_FER\CAFE\CAFE\..\..\KMU-FED\KMU-FED
+  受试者总数: 12
+  图片总数: 1106
+  类别数: 6
+         angry (id=0):  196 ###################
+       disgust (id=1):  120 ############
+          fear (id=2):  200 ####################
+         happy (id=3):  210 #####################
+           sad (id=4):  180 ##################
+      surprise (id=5):  200 ####################
+
+  每受试者图片数:
+    受试者 1: 126 张  [A:26, D:20, F:20, H:20, S:20, S:20]
+    受试者 2:  60 张  [A:10, F:20, H:10, S:20]
+    受试者 3:  90 张  [A:10, F:20, H:20, S:20, S:20]
+    受试者 4:  60 张  [F:20, H:20, S:10, S:10]
+    受试者 5: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 6: 120 张  [A:20, D:20, F:20, H:20, S:20, S:20]
+    受试者 7: 100 张  [A:20, F:20, H:20, S:20, S:20]
+    受试者 8: 110 张  [A:20, D:20, F:10, H:20, S:20, S:20]
+    受试者 9:  70 张  [A:20, F:10, H:20, S:10, S:10]
+    受试者 10:  80 张  [A:10, D:10, F:20, H:20, S:20]
+    受试者 11: 100 张  [A:20, D:20, F:20, S:20, S:20]
+    受试者 12:  70 张  [A:20, D:10, H:20, S:20]
+============================================================
+
+评估方法: LOSO (12 folds)
+总轮次: 12
+
+============================================================
+  Fold 1/12: 1
+  验证受试者: 1 (126 张)
+  验证表情分布: {0: 26, 1: 20, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 980 张 | 验证: 126 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 1 Epoch  1 | Train Loss:1.3295 Acc:0.4939 | Val Loss:21.6821 Acc:0.1587 | Time:19s
+Fold 1 Epoch  2 | Train Loss:0.6029 Acc:0.8010 | Val Loss:61.2000 Acc:0.1587 | Time:19s
+Fold 1 Epoch  3 | Train Loss:0.3476 Acc:0.8980 | Val Loss:74.3242 Acc:0.1587 | Time:19s
+Fold 1 Epoch  4 | Train Loss:0.2653 Acc:0.9214 | Val Loss:91.5757 Acc:0.1587 | Time:19s
+Fold 1 Epoch  5 | Train Loss:0.2176 Acc:0.9265 | Val Loss:50.2194 Acc:0.1587 | Time:19s
+Fold 1 Epoch  6 | Train Loss:0.2049 Acc:0.9388 | Val Loss:40.6652 Acc:0.1587 | Time:19s
+Fold 1 Epoch  7 | Train Loss:0.1366 Acc:0.9633 | Val Loss:30.9900 Acc:0.1587 | Time:19s
+Fold 1 Epoch  8 | Train Loss:0.1226 Acc:0.9663 | Val Loss:29.0313 Acc:0.1587 | Time:19s
+Fold 1 Epoch  9 | Train Loss:0.1412 Acc:0.9653 | Val Loss:36.1210 Acc:0.1587 | Time:19s
+Fold 1 Epoch 10 | Train Loss:0.1333 Acc:0.9612 | Val Loss:24.5852 Acc:0.1587 | Time:20s
+Fold 1 Epoch 11 | Train Loss:0.1163 Acc:0.9612 | Val Loss:21.5764 Acc:0.1270 | Time:19s
+  ⏹ 早停于 Epoch 11（10 轮未提升）
+  ✅ Fold1 Best Val Acc: 0.1587
+
+============================================================
+  Fold 2/12: 2
+  验证受试者: 2 (60 张)
+  验证表情分布: {0: 10, 2: 20, 3: 10, 5: 20}
+  训练: 1046 张 | 验证: 60 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 2 Epoch  1 | Train Loss:1.2651 Acc:0.5335 | Val Loss:19.1315 Acc:0.1667 | Time:20s
+Fold 2 Epoch  2 | Train Loss:0.4956 Acc:0.8461 | Val Loss:38.0374 Acc:0.1667 | Time:21s
+Fold 2 Epoch  3 | Train Loss:0.3181 Acc:0.9006 | Val Loss:21.4198 Acc:0.1667 | Time:20s
+Fold 2 Epoch  4 | Train Loss:0.2019 Acc:0.9321 | Val Loss:26.3677 Acc:0.1667 | Time:21s
+Fold 2 Epoch  5 | Train Loss:0.1689 Acc:0.9484 | Val Loss:24.4294 Acc:0.1667 | Time:20s
+Fold 2 Epoch  6 | Train Loss:0.1475 Acc:0.9608 | Val Loss:12.3067 Acc:0.1667 | Time:20s
+Fold 2 Epoch  7 | Train Loss:0.1350 Acc:0.9637 | Val Loss:16.7847 Acc:0.1667 | Time:21s
+Fold 2 Epoch  8 | Train Loss:0.1139 Acc:0.9637 | Val Loss:6.6582 Acc:0.1667 | Time:21s
+Fold 2 Epoch  9 | Train Loss:0.0964 Acc:0.9742 | Val Loss:9.7096 Acc:0.1667 | Time:20s
+Fold 2 Epoch 10 | Train Loss:0.1313 Acc:0.9618 | Val Loss:11.6528 Acc:0.1667 | Time:21s
+Fold 2 Epoch 11 | Train Loss:0.1390 Acc:0.9570 | Val Loss:10.1045 Acc:0.1667 | Time:22s
+  ⏹ 早停于 Epoch 11（10 轮未提升）
+  ✅ Fold2 Best Val Acc: 0.1667
+
+============================================================
+  Fold 3/12: 3
+  验证受试者: 3 (90 张)
+  验证表情分布: {0: 10, 2: 20, 3: 20, 4: 20, 5: 20}
+  训练: 1016 张 | 验证: 90 张
+============================================================
+  🏗️  Backbone: resnet50 (imagenet)
+       特征维度: 2048
+       投影层: 2048 → 512 → 6
+       Backbone 参数: 23.5M
+Fold 3 Epoch  1 | Train Loss:1.2368 Acc:0.5482 | Val Loss:26.0796 Acc:0.2000 | Time:19s
