@@ -43,3 +43,6 @@ Thumbs.db
 yolov8n.pt
 haarcascade_frontalface_default.xml
 origincode/CAFE.zip
+
+# ==================== 实验大日志（Git 不适合存大文件）====================
+experiments/results/阶段二/*.log
