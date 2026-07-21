@@ -46,3 +46,6 @@ origincode/CAFE.zip
 
 # ==================== 实验大日志（Git 不适合存大文件）====================
 experiments/results/阶段二/*.log
+experiments/results/阶段三/*.log
+origincode/CAFE/CAFE/KMU-FED/output_optimize/**/fold_*/
+origincode/CAFE/CAFE/KMU-FED/output_optimize/**/*.pth
